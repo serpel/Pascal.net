@@ -162,13 +162,16 @@ public class Lexer {
         }else if( modo.equals("ReturnEndOfJavaCode")){
             modo = "Cup";
             return new Token(":}", Token.TokenType.JavaCodeEnd, row, column - 2);
+        }else if( modo.equals("ReturnEndOfFile")){
+            modo = "JavaCode";
+            return new Token("EOF", Token.TokenType.EOF, row, column);
         }else if( modo.equals("JavaCode") ){
             String javaCode = "";
             int tempRow = row, tempColumn = column;
             while (true) {
                 if (CurrentSymbol == '\0') {
-                    javaCode += CurrentSymbol;
-                    return new Token("EOF", Token.TokenType.EOF, row, column);                
+                    modo = "ReturnEndOfFile";
+                    return new Token(javaCode, Token.TokenType.JavaCode, tempRow, tempColumn);
                 } else if (CurrentSymbol == ' ' || CurrentSymbol ==  '\t' ) {
                     javaCode += CurrentSymbol;
                     getNextSymbol();

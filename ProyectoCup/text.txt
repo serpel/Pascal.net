@@ -50,3 +50,4 @@ non terminal Integer    expr, factor, term;
                              val = new Integer(0);
                          RESULT=val; 
                        :} ;
+{:a asdasdasd
