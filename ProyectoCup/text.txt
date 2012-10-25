@@ -8,8 +8,7 @@ parser code {:
   public Hashtable<String,Integer> vars = new Hashtable<String,Integer>(); 
 
 :};
-   
-
+  
    
 terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN,EQUALS,PRINT;
 terminal    NUMBER;

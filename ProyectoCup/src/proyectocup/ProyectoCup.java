@@ -16,18 +16,14 @@ public class ProyectoCup {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws Exception {
-        
-        Lexer lex = new Lexer("text.txt");
-        
+    public static void main(String[] args) throws Exception{
+        Lexer lex = new Lexer("text.txt");        
         Token t;
         do
         {
             t = lex.getNextToken();
-            System.out.println("Lexema: " + t.getLexema() + " Tipo: " + t.getTipo());
-
+            String output = String.format("(%d,%d)Lexema = [%s] ; Tipo = [%s]", t.getRow(), t.getColumn(), t.getLexema(), t.getTipo());
+            System.out.println(output);
         } while(Token.TokenType.EOF != t.getTipo());
-        //Lexer l = new Lexer( "text.txt" );
-        // TODO code application logic here
     }
 }

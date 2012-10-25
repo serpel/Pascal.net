@@ -79,6 +79,7 @@ public class Token {
     }    
     
     public enum TokenType{
+        Asterisk,
         Import,
         Parser,
         Code,
@@ -91,6 +92,7 @@ public class Token {
         Or,
         Assign,
         Comma,
+        Dot,
         Identifier,
         JavaCode,
         EOF
