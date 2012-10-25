@@ -33,8 +33,9 @@ public class Lexer {
             
             buffer = new char[BufferSize];
             pos = BufferSize;
-            getNextSymbol();
             setKeyWords();
+            getNextSymbol();
+            
         }catch(Exception e){
             System.err.println("Lexer Error: " + e.getMessage());
         }
