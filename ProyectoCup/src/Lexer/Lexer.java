@@ -133,7 +133,7 @@ public class Lexer {
                             CurrentSymbol = getNextSymbol();
 
                         } while (Character.isLetter(CurrentSymbol) || CurrentSymbol == '_' || Character.isDigit(CurrentSymbol));
-                    
+                        pos--;
                       
                         if(Keywords.containsKey(lexema.toLowerCase())){
                             return new Token(lexema, (Token.TokenType)Keywords.get(lexema),row,column); 
