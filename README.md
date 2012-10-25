@@ -1,4 +1,5 @@
 Cup
 ===
 
-Proyecto de COmpiladores 2
+Proyecto de Compiladores 2
+
