@@ -126,9 +126,9 @@ public class Lexer {
                             if (CurrentSymbol == '=') {
                                 getNextSymbol();
                                 return new Token("::=", Token.TokenType.Assign, row, column-2);
-                            }                        
-                            return new Token(":", Token.TokenType.Colon, row, column-1);
+                            } 
                         }
+                        return new Token(":", Token.TokenType.Colon, row, column-1);
                     case ';':
                         getNextSymbol();
                         return new Token(";", Token.TokenType.Semicolon, row, column-1);
