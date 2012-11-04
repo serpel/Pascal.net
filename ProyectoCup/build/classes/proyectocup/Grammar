@@ -1,0 +1,27 @@
+
+
+S ::= import java_code terminal non_terminal definitions
+
+import ::= IMPORT JAVACODE import
+        | 3
+            
+java_code = PARSER CODE JAVACODESTART JAVACODE JAVACODEEND SEMICOLON
+   
+terminal ::= TERMINAL [ID<ID>]? id_list SEMICOLON terminal
+          | 3
+
+non_terminal ::= NON TERMINAL [ID<ID>]? id_list SEMICOLON non_terminal
+              | 3
+
+id_list  ::= ID COMA id_list
+           | 3
+
+definitions ::= definition definitions
+              | 3
+
+definition ::= ID ASSIGN productions SEMICOLON
+
+productions ::= production OR productions
+              | 3
+
+production ::= ID[:ID | {: JAVACODE :}]? production
