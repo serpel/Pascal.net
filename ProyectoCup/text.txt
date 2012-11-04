@@ -1,7 +1,6 @@
    
    
-import java_cup.runtime.*;
-import java.util.*;   
+import java_cup.runtime.*;  
 
 parser code {:
     
@@ -17,12 +16,8 @@ terminal     ID;
 non terminal Object     expr_list, expr_part;
 non terminal Integer    expr, factor, term;
    
-
-
-
-   
    expr_list ::= expr_list expr_part
-                 |expr_part;
+               | expr_part;
    
    
    expr_part ::= PRINT expr:e SEMI{: System.out.println(e.intValue()); :}
@@ -50,4 +45,3 @@ non terminal Integer    expr, factor, term;
                              val = new Integer(0);
                          RESULT=val; 
                        :} ;
-{:a asdasdasd

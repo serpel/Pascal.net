@@ -95,6 +95,8 @@ public class Token {
         Dot,
         Identifier,
         JavaCode,
+        Less,
+        Great,
         EOF
     };
     
