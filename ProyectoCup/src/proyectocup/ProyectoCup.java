@@ -6,7 +6,7 @@ package proyectocup;
 
 import Lexer.Lexer;
 import Parser.Parser;
-
+import Tree.Program;
 /**
  *
  * @author serpel
@@ -21,6 +21,9 @@ public class ProyectoCup {
         try {
             Lexer lex = new Lexer("text.txt");
             Parser p = new Parser(lex);
+            Program program = p.Parse();
+            
+            int i = 0;
         } catch (Exception e) {
             System.err.print(e.getMessage());
         }
