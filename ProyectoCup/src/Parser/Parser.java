@@ -163,14 +163,14 @@ public class Parser {
     private void Terminal(Program program) throws Exception{
         while (cToken.getTipo() == Token.TokenType.Terminal) {
             Terminals terminal = new Terminals();
-            Boolean isTerminal = cToken.getTipo() == Token.TokenType.Terminal;
             cToken = lex.getNextToken();
 
             if (cToken.getTipo() == Token.TokenType.Identifier) {
                 String type = cToken.getLexema();
                 cToken = lex.getNextToken();
-                
+                Boolean containsLess = false;
                 if (cToken.getTipo() == Token.TokenType.Less) {
+                    containsLess = true;
                     type += cToken.getLexema();
                     cToken = lex.getNextToken();
 
@@ -190,6 +190,8 @@ public class Parser {
                 }
                 
                 if( cToken.getTipo() == Token.TokenType.Comma || cToken.getTipo() == Token.TokenType.Semicolon){
+                    if( containsLess )
+                            Error("Identificador de terminal no puede contener '<' o '>'");
                     terminal.setId(IdList());
                     terminal.AddValue(type);
                 }else{
@@ -218,8 +220,10 @@ public class Parser {
                 if (cToken.getTipo() == Token.TokenType.Identifier) {
                     String type = cToken.getLexema();
                     cToken = lex.getNextToken();
+                    Boolean containsLess = false;
 
                     if (cToken.getTipo() == Token.TokenType.Less) {
+                        containsLess = true;
                         type += cToken.getLexema();
                         cToken = lex.getNextToken();
 
@@ -240,6 +244,8 @@ public class Parser {
                     }
                     
                     if( cToken.getTipo() == Token.TokenType.Comma || cToken.getTipo() == Token.TokenType.Semicolon){
+                        if( containsLess )
+                            Error("Identificador de terminal no puede contener '<' o '>'");
                         terminal.setId(IdList());
                         terminal.AddValue(type);
                     }else{
