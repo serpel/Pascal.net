@@ -144,6 +144,12 @@ public class Lexer {
                     case '*':
                         getNextSymbol();
                         return new Token("*", Token.TokenType.Asterisk, row, column-1);
+                    case '<':
+                        getNextSymbol();
+                        return new Token("<", Token.TokenType.Less, row, column-1);
+                    case '>':
+                        getNextSymbol();
+                        return new Token(">", Token.TokenType.Great, row, column-1);
                     default:                    
                         if (Character.isLetter(CurrentSymbol) || CurrentSymbol == '_') {
                             String lexema = "";

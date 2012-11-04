@@ -103,7 +103,7 @@ public class Parser {
     }
     
     /*
-     terminal ::= TERMINAL id_list SEMICOLON terminal
+     terminal ::= TERMINAL [ID<ID>?] id_list SEMICOLON terminal
           | 3
      */
     
@@ -113,6 +113,20 @@ public class Parser {
         while(cToken.getTipo() == Token.TokenType.Terminal)
         {
             cToken = lex.getNextToken();
+            
+            if(cToken.getTipo() == Token.TokenType.Identifier)
+            {
+                cToken = lex.getNextToken();
+                if(cToken.getTipo() == Token.TokenType.Less)
+                {
+                    cToken = lex.getNextToken();
+                    
+                    if(cToken.getTipo() == Token.TokenType.Identifier)
+                    {
+                        cToken = lex.getNextToken();
+                    }
+                }
+            }
             IdList();
             
             if(cToken.getTipo() == Token.TokenType.Semicolon)
@@ -125,15 +139,13 @@ public class Parser {
     }
     
     /* 
-     id_list  ::= ID<ID>? COMA id_list
+     id_list  ::= ID COMA id_list
            | 3
      */
     private void IdList() throws Exception {
 
         if (cToken.getTipo() == Token.TokenType.Identifier) {
             cToken = lex.getNextToken();
-        } else {
-            Error(cToken);
         }
 
         while (cToken.getTipo() == Token.TokenType.Comma) {
@@ -147,7 +159,7 @@ public class Parser {
     }
     
     /*
-     non_terminal ::= NON TERMINAL id_list SEMICOLON non_terminal
+     non_terminal ::= NON TERMINAL [ID<ID>?] id_list SEMICOLON non_terminal
               | 3
      */
     private void NonTerminal() throws Exception
@@ -159,7 +171,18 @@ public class Parser {
             
             if(cToken.getTipo() == Token.TokenType.Terminal)
             {
-                cToken = lex.getNextToken();  
+                cToken = lex.getNextToken();
+                
+                if (cToken.getTipo() == Token.TokenType.Identifier) {
+                    cToken = lex.getNextToken();
+                    if (cToken.getTipo() == Token.TokenType.Less) {
+                        cToken = lex.getNextToken();
+
+                        if (cToken.getTipo() == Token.TokenType.Identifier) {
+                            cToken = lex.getNextToken();
+                        }
+                    }
+                }
                 IdList();
                 
                 if(cToken.getTipo() == Token.TokenType.Semicolon)

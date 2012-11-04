@@ -7,10 +7,10 @@ import ::= IMPORT JAVACODE import
             
 java_code = PARSER CODE JAVACODESTART JAVACODE JAVACODEEND SEMICOLON
    
-terminal ::= TERMINAL [ID<ID>]? id_list SEMICOLON terminal
+terminal ::= TERMINAL [ID<ID>?] id_list SEMICOLON terminal
           | 3
 
-non_terminal ::= NON TERMINAL [ID<ID>]? id_list SEMICOLON non_terminal
+non_terminal ::= NON TERMINAL [ID<ID>?] id_list SEMICOLON non_terminal
               | 3
 
 id_list  ::= ID COMA id_list
