@@ -189,7 +189,7 @@ public class Parser {
                     }
                 }
                 
-                if( cToken.getTipo() == Token.TokenType.Comma ){
+                if( cToken.getTipo() == Token.TokenType.Comma || cToken.getTipo() == Token.TokenType.Semicolon){
                     terminal.setId(IdList());
                     terminal.AddValue(type);
                 }else{
@@ -239,7 +239,7 @@ public class Parser {
                         }
                     }
                     
-                    if( cToken.getTipo() == Token.TokenType.Comma ){
+                    if( cToken.getTipo() == Token.TokenType.Comma || cToken.getTipo() == Token.TokenType.Semicolon){
                         terminal.setId(IdList());
                         terminal.AddValue(type);
                     }else{
