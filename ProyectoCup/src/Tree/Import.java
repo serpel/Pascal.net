@@ -27,5 +27,5 @@ public class Import {
      */
     public void setSentencia(String statement) {
         this.statement = statement;
-    }
+    }  
 }
