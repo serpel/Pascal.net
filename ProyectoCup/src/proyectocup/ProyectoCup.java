@@ -4,6 +4,7 @@
  */
 package proyectocup;
 
+import LR.LR;
 import Lexer.Lexer;
 import Parser.Parser;
 import Tree.Program;
@@ -19,9 +20,12 @@ public class ProyectoCup {
     public static void main(String[] args) throws Exception{
         
         try {
-            Lexer lex = new Lexer("text.txt");
+            Lexer lex = new Lexer("text2.txt");
             Parser p = new Parser(lex);
             Program program = p.Parse();
+            
+            LR table = new LR(program);        
+            table.toStr();
             
             int i = 0;
         } catch (Exception e) {
