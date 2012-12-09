@@ -7,6 +7,7 @@ package proyectocup;
 import Lexer.Lexer;
 import Parser.Parser;
 import Tree.Program;
+import ParserGenerator.ParserGenerator;
 /**
  *
  * @author serpel
@@ -19,9 +20,12 @@ public class ProyectoCup {
     public static void main(String[] args) throws Exception{
         
         try {
-            Lexer lex = new Lexer("text.txt");
+            Lexer lex = new Lexer("src/text.txt");
             Parser p = new Parser(lex);
             Program program = p.Parse();
+            ParserGenerator generator = new ParserGenerator(program);
+            
+            generator.Generate();
             
             int i = 0;
         } catch (Exception e) {
