@@ -27,6 +27,7 @@ public class ProyectoCup {
             Lexer lex = new Lexer("src/text.txt");
             Parser p = new Parser(lex);
             Program program = p.Parse();
+            program.ValidateSemantics();
             ParserGenerator generator = new ParserGenerator(program);
             
             LR lr = new LR(program);            
@@ -47,7 +48,7 @@ public class ProyectoCup {
             
             int i = 0;
         } catch (Exception e) {
-            System.err.print(e.getMessage());
+            System.err.println(e.getMessage());
         }
         
         /*
