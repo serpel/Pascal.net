@@ -28,9 +28,6 @@ public class ProyectoCup {
             
             generator.Generate();
             
-            LR table = new LR(program);        
-            table.toStr();
-            
             int i = 0;
         } catch (Exception e) {
             System.err.print(e.getMessage());
