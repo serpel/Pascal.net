@@ -15,7 +15,7 @@ public class LR {
     
     Program p;
     
-    ArrayList<States> sts;
+    ArrayList<State> sts;
 
     public LR(Program p) {
         this.p = p;
@@ -27,7 +27,7 @@ public class LR {
         this.p = p;
     }
 
-    public void setSts(ArrayList<States> sts) {
+    public void setSts(ArrayList<State> sts) {
         this.sts = sts;
     }
 
@@ -35,13 +35,8 @@ public class LR {
         return p;
     }
 
-    public ArrayList<States> getSts() {
+    public ArrayList<State> getSts() {
         return sts;
-    }
-       
-    private Item isTerminal(Item i)
-    {
-        return null;
     }
     
     private Definitions find_definitions(String i)
@@ -90,17 +85,26 @@ public class LR {
     
     
     // OK
-    private boolean isNonTerminal(String ID)
+    private boolean isNonTerminal(String id)
     {
-        
         for (Terminals t: p.getTerminals()) {
             
-            if(t.getId().contains(ID))
+            if(t.getId().contains(id))
             {
                 return true;
             }    
+        }  
+        return false;
+    }
+    
+    private boolean isTerminal(String id)
+    {
+        for (Terminals tr : p.getTerminals()) {
+            if(tr.getId().contains(id))
+            {
+                return true;
+            }
         }
-        
         return false;
     }
     
@@ -149,102 +153,28 @@ public class LR {
         return elements;
     }
     
-      // OK
-    private ArrayList<Definitions> ir_a2(ArrayList<Definitions> i, String symbol)
-    {     
-        ArrayList<Definitions> elements = new ArrayList<Definitions>();
-        
-        for (Definitions j : i) { 
-            
-            ArrayList<Productions> _p = new ArrayList<Productions>();
-            
-            for (Productions p : j.getProductions()) {
-                 
-                int pos = p.get_item(symbol);
-                if( pos >= 0)
-                {
-                    // Se desplaza el punto
-                    p.isdot = pos+1;
-                    // Se re definen las producciones con el simbolo X
-                    _p.add(p);
-                }
-            } 
-            /* Nota***
-             * Se optinen el closure de las producciones con el simbolo X
-             * */
-            if (!_p.isEmpty()) {               
-                // Se obtiene la cerradura del elemento desplazado
-                j.setProductions(_p);
-                elements.addAll(closure(j));
-            }     
-        }  
-        
-        return elements;
-    }
-    
     /* por cada conjunto de elementos, y cada definicion
      * obtengo las producciones cuyo elemento X es deplazable y 
      * no sea parte del elemento.
      * */
-    
-    private void elements()
-    {
-        int count = 0;
-        ArrayList<States> sts = new ArrayList<States>();
-        ArrayList<Definitions> c;
-
-        // cerradura({[S' -> .S]})
-        c = closure(p.getDefinitions().get(0));
-
-        //add items to LR States
-        sts.add(new States(count, c));
-        
-        // X cada conjunto de elementos I en C
-        for (int j=0; j<c.size(); j++) {
-            
-            Definitions i = c.get(j);        
-            ArrayList<String> symbol = getSymbols();
-            
-            // Y cada symbolo Gramatical X 
-            for (String x : symbol) {
-                
-                ArrayList<Definitions> _i = new ArrayList<Definitions>();
-                _i.add(i);
-                
-                ArrayList<Definitions> ira = ir_a(_i, x);
-                
-                //tal que ir_a no este vacio e ir_a no este en C
-                if(!ira.isEmpty())
-                {
-                    sts.add(new States(count++, ira));
-                    
-//                    if(!c.containsAll(ira))
-//                    {
-//                        c.addAll(ira);
-//                    }
-                } 
-            }
-        }
-    }
-    
-    
-    private ArrayList<States> elementsLR()
+   
+    private ArrayList<State> elementsLR()
     {
         int count = 0;
         Stack  work_stack = new Stack();
-        States st;
-        States new_st;
+        State st;
+        State new_st;
         ArrayList<Definitions> new_defs = new ArrayList<Definitions>();
-        ArrayList<States> sts = new ArrayList<States>();
+        ArrayList<State> sts = new ArrayList<State>();
         ArrayList<Definitions> c;
 
         // cerradura({[S' -> .S]})
         Definitions first_definiton = p.getDefinitions().get(0);
         c = closure(first_definiton);
 
-        //create LR States from the closure of firts element
-        States start_st = new States(count++, c);       
-        start_st.getRefs().put(0, c.get(0).getProductions().get(0).get_item_dot().id);
+        //create LR State from the closure of firts element
+        State start_st = new State(count++, c);       
+        //start_st.getRefs().put(0, c.get(0).getProductions().get(0).get_item_dot().id);
         
         sts.add(start_st);
         work_stack.push(start_st);
@@ -253,7 +183,7 @@ public class LR {
         while(!work_stack.isEmpty())
         {
             // sacamos el estado a usar
-            st = (States)work_stack.pop();
+            st = (State)work_stack.pop();
             
             // Todos los simbolos antes del punto
             ArrayList<String> symbols = new ArrayList<String>();
@@ -279,11 +209,14 @@ public class LR {
                         
                 if(!new_defs.isEmpty())
                 {
-                    new_st = new States(count++, new_defs);
-                    new_st.getRefs().put(0, x);
+                    new_st = new State(count++, new_defs);
+                    //new_st.getRefs().put(0, x);
                     
                     sts.add(new_st);
-                    work_stack.push(new_st);    
+                    work_stack.push(new_st);  
+                                     
+                    /* add a transition from current state to new state */
+                    st.addTransicion(x, new_st);
                 }
             }     
         }
@@ -291,6 +224,30 @@ public class LR {
         return sts;
     }
 
+    public String firts(String symbol)
+    {
+        boolean change = true;
+        
+        while (change) { 
+            
+            /* new Changes */
+            change = false;
+            
+            /* cada produccion de un no terminal */
+            for (Definitions def: p.getDefinitions()) {  
+                
+                if(isNonTerminal(def.getId()))
+                {
+                    for (Productions pr: def.getProductions()) {
+
+                        
+                    }  
+                }
+            }  
+        }
+        
+        return "";
+    }
     
     boolean contain(ArrayList<Definitions> j, Item i)
     {
@@ -322,10 +279,10 @@ public class LR {
     
     public void toStr()
     {
-        System.out.println("\t---- States ----\t");
+        System.out.println("-------- States --------\n");
         
         String msj = "";
-        for (States state : sts) { 
+        for (State state : sts) { 
             msj += state.printState()+"\n";
         }   
         

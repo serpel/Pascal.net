@@ -5,47 +5,49 @@
 package LR;
 
 import Tree.Definitions;
-import Tree.Productions;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  *
  * @author SergioJavier
  */
-public class States {
+public class State {
     
     private int num;
     private ArrayList<Definitions> defs;
-    private HashMap<Integer, String> refs;
+    private ArrayList<Transition> transitions;
 
-    public States(int num, ArrayList<Definitions> defs) {
+    public State(int num, ArrayList<Definitions> defs) {
         this.num = num;
         this.defs = defs;
-        refs = new HashMap<Integer, String>();
+        this.transitions = new ArrayList<Transition>();
     }
 
     public int getNum() {
         return num;
     }
 
-    public ArrayList<Definitions> getDefs() {
-        return defs;
+    public ArrayList<Transition> getTransitions() {
+        return transitions;
     }
 
-    public HashMap<Integer, String> getRefs() {
-        return refs;
-    }  
-    
+    public ArrayList<Definitions> getDefs() {
+        return defs;
+    }    
+ 
     public String getStateID()
     {
         return "S"+num;
     }
     
+    public void addTransicion(String symbol, State to_st)
+    {  
+        this.transitions.add( new Transition(symbol,to_st) );        
+    }
+    
     public String printState()
-    {
-        
-        String msj = "("+getStateID()+" -> "+refs.get(0)+")\n";
+    {        
+        String msj = "("+getStateID()+" -> \n";//+refs.get(0)+")\n";
         
         for (Definitions definitions : defs) {
             
