@@ -4,7 +4,10 @@
  */
 package proyectocup;
 
+import LR.Action;
 import LR.LR;
+import LR.State;
+import LR.Table;
 import Lexer.Lexer;
 import Parser.Parser;
 import Tree.Program;
@@ -25,6 +28,20 @@ public class ProyectoCup {
             Parser p = new Parser(lex);
             Program program = p.Parse();
             ParserGenerator generator = new ParserGenerator(program);
+            
+            LR lr = new LR(program);            
+            
+            /* Tabla de acciones */
+            
+            Table t = new Table(lr);
+            // iniciliza la tabla con estados nullos y el tipo en error
+            Action [][] action_table = t.genTable();
+            
+            // Aqui van las acciones en cada posicion de la tabla
+            action_table[1][1] = new Action(lr.getSts().get(1), Action.Type.Reduce);
+            action_table[1][2] = new Action(lr.getSts().get(2), Action.Type.Shift);
+            action_table[1][3] = new Action(lr.getSts().get(3), Action.Type.Reduce); 
+            action_table[1][4] = new Action(null, Action.Type.Reduce);  
             
             generator.Generate();
             
