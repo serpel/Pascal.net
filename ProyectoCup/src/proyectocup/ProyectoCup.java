@@ -12,6 +12,7 @@ import Lexer.Lexer;
 import Parser.Parser;
 import Tree.Program;
 import ParserGenerator.ParserGenerator;
+import java.util.ArrayList;
 /**
  *
  * @author serpel
@@ -24,27 +25,23 @@ public class ProyectoCup {
     public static void main(String[] args) throws Exception{
         
         try {
-            Lexer lex = new Lexer("src/text.txt");
+            Lexer lex = new Lexer("src/text2.txt");
             Parser p = new Parser(lex);
             Program program = p.Parse();
-            program.ValidateSemantics();
-            ParserGenerator generator = new ParserGenerator(program);
             
-            LR lr = new LR(program);            
+            //program.ValidateSemantics();
+            //ParserGenerator generator = new ParserGenerator(program);
+            //generator.Generate();
             
-            /* Tabla de acciones */
+            LR lr = new LR(program);   
+            lr.toStr();
             
-            Table t = new Table(lr);
             // iniciliza la tabla con estados nullos y el tipo en error
-            Action [][] action_table = t.genTable();
+            Table t = new Table(lr);        
+            t.getLR_table();           
+            t.printTransicionTable();
             
-            // Aqui van las acciones en cada posicion de la tabla
-            action_table[1][1] = new Action(lr.getSts().get(1), Action.Type.Reduce);
-            action_table[1][2] = new Action(lr.getSts().get(2), Action.Type.Shift);
-            action_table[1][3] = new Action(lr.getSts().get(3), Action.Type.Reduce); 
-            action_table[1][4] = new Action(null, Action.Type.Reduce);  
             
-            generator.Generate();
             
             int i = 0;
         } catch (Exception e) {

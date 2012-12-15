@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public class State {
     
     private int num;
+    private String id;
+    private String to_reduce;
     private ArrayList<Definitions> defs;
     private ArrayList<Transition> transitions;
 
@@ -21,7 +23,24 @@ public class State {
         this.num = num;
         this.defs = defs;
         this.transitions = new ArrayList<Transition>();
+        this.id = "S";
     }
+
+    public State(int num, String to_reduce, ArrayList<Definitions> defs) {
+        this.num = num;
+        this.to_reduce = to_reduce;
+        this.defs = defs;
+        this.transitions = new ArrayList<Transition>();
+        this.id = "S";
+    }
+    
+    public String getTo_reduce() {
+        return to_reduce;
+    }
+
+    public void setTo_reduce(String to_reduce) {
+        this.to_reduce = to_reduce;
+    } 
 
     public int getNum() {
         return num;
@@ -37,7 +56,7 @@ public class State {
  
     public String getStateID()
     {
-        return "S"+num;
+        return id+num;
     }
     
     public void addTransicion(String symbol, State to_st)
@@ -47,7 +66,7 @@ public class State {
     
     public String printState()
     {        
-        String msj = "("+getStateID()+" -> \n";//+refs.get(0)+")\n";
+        String msj = "("+getStateID()+" -> "+ this.to_reduce +")\n";
         
         for (Definitions definitions : defs) {
             

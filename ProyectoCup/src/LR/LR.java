@@ -39,7 +39,7 @@ public class LR {
         return sts;
     }
     
-    private Definitions find_definitions(String i)
+    protected Definitions find_definitions(String i)
     {        
         for (Definitions definitions : p.getDefinitions()) {
             
@@ -53,7 +53,7 @@ public class LR {
     
     
     // OK
-    private ArrayList<Definitions> closure(Definitions i)
+    protected ArrayList<Definitions> closure(Definitions i)
     {
         ArrayList<Definitions> j = new ArrayList<Definitions>();
         j.add(i);
@@ -85,9 +85,9 @@ public class LR {
     
     
     // OK
-    private boolean isNonTerminal(String id)
+    protected boolean isNonTerminal(String id)
     {
-        for (Terminals t: p.getTerminals()) {
+        for (Terminals t: p.getNonTerminals()) {
             
             if(t.getId().contains(id))
             {
@@ -97,7 +97,7 @@ public class LR {
         return false;
     }
     
-    private boolean isTerminal(String id)
+    protected boolean isTerminal(String id)
     {
         for (Terminals tr : p.getTerminals()) {
             if(tr.getId().contains(id))
@@ -110,7 +110,7 @@ public class LR {
     
     
     // OK
-    private ArrayList<Definitions> ir_a(ArrayList<Definitions> i, String symbol)
+    protected ArrayList<Definitions> ir_a(ArrayList<Definitions> i, String symbol)
     {     
         ArrayList<Definitions> elements = new ArrayList<Definitions>();
         Definitions _j;
@@ -158,7 +158,7 @@ public class LR {
      * no sea parte del elemento.
      * */
    
-    private ArrayList<State> elementsLR()
+    protected ArrayList<State> elementsLR()
     {
         int count = 0;
         Stack  work_stack = new Stack();
@@ -171,9 +171,13 @@ public class LR {
         // cerradura({[S' -> .S]})
         Definitions first_definiton = p.getDefinitions().get(0);
         c = closure(first_definiton);
+        
+        // test 
+        if(c.size() < 1)
+            return null;
 
         //create LR State from the closure of firts element
-        State start_st = new State(count++, c);       
+        State start_st = new State(count++, c.get(1).getId() ,c);       
         //start_st.getRefs().put(0, c.get(0).getProductions().get(0).get_item_dot().id);
         
         sts.add(start_st);
@@ -209,7 +213,7 @@ public class LR {
                         
                 if(!new_defs.isEmpty())
                 {
-                    new_st = new State(count++, new_defs);
+                    new_st = new State(count++,x, new_defs);
                     //new_st.getRefs().put(0, x);
                     
                     sts.add(new_st);
@@ -224,32 +228,41 @@ public class LR {
         return sts;
     }
 
-    public String firts(String symbol)
-    {
-        boolean change = true;
+    protected ArrayList<String> firts(String symbol) {
         
-        while (change) { 
-            
-            /* new Changes */
-            change = false;
-            
-            /* cada produccion de un no terminal */
-            for (Definitions def: p.getDefinitions()) {  
-                
-                if(isNonTerminal(def.getId()))
-                {
-                    for (Productions pr: def.getProductions()) {
+        ArrayList<String> list_firts = new ArrayList<String>();
 
-                        
-                    }  
-                }
-            }  
+        if (isTerminal(symbol)) {
+            list_firts.add(symbol);
+        } else {
+            Definitions d = find_definitions(symbol);
+
+            for (Productions pr : d.getProductions()) {
+                /* 
+                 * primer elemento de la produccion {semantico validar que no esten vacias las producciones}
+                 * */
+                symbol = pr.items.get(0).id;
+
+                // Se calcula su nuevo primero si no es la definicion actual 
+                if(!d.getId().equals(symbol))
+                {
+                    ArrayList<String> _list_firts = firts(symbol);
+                    list_firts.addAll(_list_firts);
+                }  
+            }
         }
-        
-        return "";
+
+        return list_firts;
     }
     
-    boolean contain(ArrayList<Definitions> j, Item i)
+    protected ArrayList<String> follow(String symbol)
+    {
+        ArrayList<String> list_follows = new ArrayList<String>();
+        
+        return list_follows;
+    }
+    
+    protected boolean contain(ArrayList<Definitions> j, Item i)
     {
         for (Definitions definitions : j) {
             
@@ -262,7 +275,7 @@ public class LR {
         return false;
     } 
     
-    public ArrayList<String> getSymbols()
+    protected ArrayList<String> getSymbols()
     {
         ArrayList<String> i = new ArrayList<String>();
         
