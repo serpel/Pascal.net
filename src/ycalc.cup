@@ -1,0 +1,249 @@
+
+
+
+   
+
+import java_cup.runtime.*;
+import java.util.ArrayList;
+
+parser code {:
+    
+  
+    public void report_error(String message, Object info) {
+   
+       
+        StringBuffer m = new StringBuffer("Error");
+   
+       
+        if (info instanceof java_cup.runtime.Symbol) {
+           
+            java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
+   
+           
+            if (s.left >= 0) {                
+               
+                m.append(" in line "+(s.left+1));   
+               
+                if (s.right >= 0)                    
+                    
+                    m.append(", column "+(s.right+1));
+            }
+        }
+   
+       
+        m.append(" : "+message);
+   
+      
+        System.err.println(m);
+    }
+   
+  
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        System.exit(1);
+    }
+:};
+   
+
+
+terminal          SEMICOLON, COLON, SEMI, PLUS, MINUS, TIMES, DIVIDE, MOD, LBRACKET, RBRACKET, LBRACE, RBRACE, GREATER, GREATER_THAN, LESS, LESS_THAN, EQUAL, DOTS, DOT, ASSIGN;
+terminal          PROGRAM, FUNCTION, VAR, CASE, IF, ELSE, WHILE, FOR, REPEAT, THEN, TO, DO, OF, UNTIL, BEGIN, END, AND, OR, REF, WRITELN, WRITE, READLN, READ;
+terminal          ARRAY, STRING, INT, REAL, BOOL, TYPE, DOWNTO;
+terminal String   NUMBER, ID;
+terminal java.lang.String STRING_LITERAL;
+   
+
+/* 
+-------------------------------------
+non terminal productions principales
+-------------------------------------
+*/
+
+non terminal Object program;
+non terminal Object block;
+non terminal Object parameter;
+non terminal Object statement;
+non terminal Object expr;
+non terminal Object factor;
+non terminal Object term;
+non terminal Object constant;
+non terminal Object type;
+non terminal Object variable;
+non terminal Object function;
+
+/* 
+-------------------------------------------------------------
+non terminal productions que son listas de otras producciones 
+o auxiliares de producciones principales
+-------------------------------------------------------------
+*/
+
+non terminal Object blocks;
+non terminal Object functions; 
+non terminal Object variables; 
+non terminal Object stms; 
+non terminal Object params;
+non terminal Object param;
+non terminal Object ids;
+non terminal Object wr_param;
+non terminal Object w_param;
+non terminal Object constants;
+non terminal Object expr_list;
+non terminal Object for_part;
+
+
+/* BEGIN */
+
+program   ::= PROGRAM ID parameter SEMICOLON blocks DOT
+              |
+              ;
+
+parameter ::= LBRACKET params RBRACKET
+              |
+              ;
+
+params    ::= params SEMICOLON param
+              |
+              param
+              ; 
+
+param     ::= REF ids COLON type
+              |
+              VAR ids COLON type
+              |
+              ids
+              ;
+
+blocks    ::= blocks block
+              |
+              block
+              ;
+                        
+block     ::= BEGIN stms END
+              |
+              TYPE ID ASSIGN type SEMICOLON
+              |
+              VAR ids COLON type SEMICOLON
+              |
+              ID COLON type SEMICOLON
+              |
+              FUNCTION ID parameter COLON type SEMICOLON blocks SEMICOLON
+              ;
+
+ids       ::= ID SEMI ids 
+              |
+              ID
+              ;
+
+stms      ::= stms SEMICOLON statement 
+              |
+              statement             
+              ;
+
+statement ::= |
+              ID ASSIGN expr
+              |
+              ID LBRACKET expr_list RBRACKET  /* FUNCTION CALL */
+              |
+              IF LBRACKET expr RBRACKET THEN statement ELSE statement
+              |
+              CASE expr OF constants COLON stms END
+              |
+              WHILE expr DO statement
+              |
+              FOR ID ASSIGN expr for_part
+              |
+              REPEAT stms UNTIL expr
+              |
+              BEGIN stms END
+              |
+              WRITELN LBRACKET wr_param RBRACKET
+              |
+              WRITELN SEMICOLON
+              |
+              READLN LBRACKET ID RBRACKET
+              ;
+
+for_part  ::= TO expr DO statement
+              |
+              DOWNTO expr DO statement
+              ;
+
+wr_param  ::= wr_param SEMI w_param
+              |
+              w_param
+              ;
+
+w_param   ::= ID
+              |
+              STRING_LITERAL
+              ;
+
+expr      ::= expr GREATER factor
+              |
+              expr GREATER_THAN factor
+              |
+              expr LESS factor
+              |
+              expr LESS_THAN factor
+              |
+              expr EQUAL factor
+              |
+              expr PLUS factor
+              |
+              expr MINUS factor
+              |
+              expr OR factor
+              | 
+              factor
+              ;
+
+factor    ::= factor TIMES term
+              |
+              factor DIVIDE term
+              |              
+              factor MOD term
+              |
+              factor AND term
+              |
+              term
+              ;
+
+term      ::= ID
+              |
+              ID LBRACKET expr_list RBRACKET
+              | 
+              LBRACKET expr RBRACKET  /* ((4+3)*5) */           
+              |
+              ID LBRACE constant RBRACE /* ARRAY CALL */
+              |
+              NUMBER
+              ;
+
+constants ::= constants SEMI constant
+              | 
+              constant
+              ;
+
+constant  ::= NUMBER DOTS NUMBER
+              |
+              ID DOTS ID
+              ;
+
+expr_list ::= expr_list SEMI expr
+              | 
+              expr
+              ;
+
+type      ::= ARRAY LBRACE constant RBRACE OF type
+              |
+              STRING
+              |
+              REAL
+              |
+              INT
+              |
+              BOOL
+              | 
+              ID
+              ;
