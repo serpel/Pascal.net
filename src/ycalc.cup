@@ -46,11 +46,18 @@ parser code {:
    
 
 
-terminal          SEMICOLON, COLON, SEMI, PLUS, MINUS, TIMES, DIVIDE, MOD, LBRACKET, RBRACKET, LBRACE, RBRACE, GREATER, GREATER_THAN, LESS, LESS_THAN, EQUAL, DOTS, DOT, ASSIGN;
-terminal          PROGRAM, FUNCTION, VAR, CASE, IF, ELSE, WHILE, FOR, REPEAT, THEN, TO, DO, OF, UNTIL, BEGIN, END, AND, OR, REF, WRITELN, WRITE, READLN, READ;
-terminal          ARRAY, STRING, INT, REAL, BOOL, TYPE, DOWNTO;
-terminal String   NUMBER, ID;
-terminal java.lang.String STRING_LITERAL;
+terminal          SEMICOLON, COLON, SEMI, PLUS, MINUS, TIMES, DIVIDE, MOD, LBRACKET, RBRACKET, LPAR, RPAR, GREATER_THAN, GREATER_THAN_OR_EQUAL, LESS_THAN, LESS_THAN_OR_EQUAL, EQUAL, NOT_EQUAL, DOT, ASSIGN;
+terminal          PROGRAM, FUNCTION, VAR, CASE, IF, ELSE, WHILE, FOR, REPEAT, THEN, TO, DO, OF, UNTIL, BEGIN, END, AND, OR, REF, WRITELN, READLN;
+terminal          ARRAY, STRING, INT, BOOL, TYPE, CONST, NOT, FLOAT, VOID, CHAR, RECORD;
+
+//Types
+terminal int     INT_LITERAL;
+terminal String  ID;
+terminal String  STRING_LITERAL;
+terminal boolean BOOLEAN_LITERAL;
+terminal float   FLOAT_LITERAL;
+terminal char    CHAR_LITERAL;
+
    
 
 /* 
@@ -61,6 +68,7 @@ non terminal productions principales
 
 non terminal Object program;
 non terminal Object block;
+non terminal Object decl_seq;
 non terminal Object parameter;
 non terminal Object statement;
 non terminal Object expr;
@@ -68,37 +76,83 @@ non terminal Object factor;
 non terminal Object term;
 non terminal Object constant;
 non terminal Object type;
-non terminal Object variable;
-non terminal Object function;
-
-/* 
--------------------------------------------------------------
-non terminal productions que son listas de otras producciones 
-o auxiliares de producciones principales
--------------------------------------------------------------
-*/
-
-non terminal Object blocks;
-non terminal Object functions; 
-non terminal Object variables; 
+non terminal Object compound;
+non terminal Object case_list;
+non terminal Object case;
+non terminal Object caselabel;
+non terminal Object addition;
+non terminal Object literal;
 non terminal Object stms; 
+non terminal Object functions;
+non terminal Object function;
+non terminal Object const_list;
+non terminal Object const_decl;
+non terminal Object type_list;
+non terminal Object type_decl;
+non terminal Object type_body;
+non terminal Object var_decl;
+non terminal Object decl_param;
+non terminal Object decl_list;
 non terminal Object params;
 non terminal Object param;
 non terminal Object ids;
-non terminal Object wr_param;
-non terminal Object w_param;
-non terminal Object constants;
 non terminal Object expr_list;
-non terminal Object for_part;
-
+non terminal Object function_call;
+non terminal Object accesor_list;
+non terminal Object variable;
 
 /* BEGIN */
 
-program   ::= PROGRAM ID parameter SEMICOLON blocks DOT
+program   ::= PROGRAM ID parameter SEMICOLON block DOT
+              |
+              ;
+                       
+block     ::= decl_seq compound
+              ;
+
+decl_seq  ::= constant type_decl var_decl functions               
+              ;
+
+//----------------------------
+constant  ::= CONST const_list
+              | 
+              ;
+
+type_decl ::= TYPE type_list
               |
               ;
 
-parameter ::= LBRACKET params RBRACKET
+var_decl  ::= VAR decl_list 
+              |
+              ;
+
+//------------------------------
+
+const_list::= const_list const_decl
+              |
+              const_decl
+              ;
+
+const_decl::= ID EQUAL literal SEMICOLON
+              ;
+
+
+functions ::= function functions
+              |
+              ;
+
+function  ::= FUNCTION ID parameter COLON type SEMICOLON compound SEMICOLON
+              ;
+ 
+type_list ::= type_list type_body 
+              |
+              type_body 
+              ;
+      
+type_body ::= ID EQUAL type SEMICOLON
+              ;
+
+parameter ::= LPAR params RPAR
               |
               ;
 
@@ -107,27 +161,11 @@ params    ::= params SEMICOLON param
               param
               ; 
 
-param     ::= REF ids COLON type
+param     ::= REF VAR ids COLON type
               |
               VAR ids COLON type
               |
               ids
-              ;
-
-blocks    ::= blocks block
-              |
-              block
-              ;
-                        
-block     ::= BEGIN stms END
-              |
-              TYPE ID ASSIGN type SEMICOLON
-              |
-              VAR ids COLON type SEMICOLON
-              |
-              ID COLON type SEMICOLON
-              |
-              FUNCTION ID parameter COLON type SEMICOLON blocks SEMICOLON
               ;
 
 ids       ::= ID SEMI ids 
@@ -135,65 +173,70 @@ ids       ::= ID SEMI ids
               ID
               ;
 
-stms      ::= stms SEMICOLON statement 
+stms      ::= stms statement   
               |
               statement             
               ;
 
-statement ::= |
-              ID ASSIGN expr
+statement ::= function_call SEMICOLON
               |
-              ID LBRACKET expr_list RBRACKET  /* FUNCTION CALL */
+              variable ASSIGN expr SEMICOLON /* ARRAY ASSIGN OR ID ASSIGN*/
               |
-              IF LBRACKET expr RBRACKET THEN statement ELSE statement
+              IF expr THEN compound ELSE compound 
               |
-              CASE expr OF constants COLON stms END
+              IF expr THEN compound 
               |
-              WHILE expr DO statement
+              CASE expr OF 
+                 case_list
+              END
               |
-              FOR ID ASSIGN expr for_part
+              WHILE expr DO compound 
               |
-              REPEAT stms UNTIL expr
+              FOR ID ASSIGN expr TO expr DO compound
               |
-              BEGIN stms END
+              REPEAT compound UNTIL expr  SEMICOLON     
               |
-              WRITELN LBRACKET wr_param RBRACKET
+              WRITELN LPAR expr RPAR SEMICOLON 
               |
-              WRITELN SEMICOLON
-              |
-              READLN LBRACKET ID RBRACKET
+              READLN LPAR ID RPAR SEMICOLON 
               ;
 
-for_part  ::= TO expr DO statement
+case_list ::= case_list case
               |
-              DOWNTO expr DO statement
+              case
               ;
 
-wr_param  ::= wr_param SEMI w_param
-              |
-              w_param
+case      ::= caselabel COLON compound 
               ;
 
-w_param   ::= ID
+caselabel ::= caselabel SEMI expr
               |
-              STRING_LITERAL
+              expr
               ;
 
-expr      ::= expr GREATER factor
+compound  ::= BEGIN stms END
+              ;
+
+expr      ::= addition GREATER_THAN_OR_EQUAL addition
               |
-              expr GREATER_THAN factor
+              addition GREATER_THAN addition
               |
-              expr LESS factor
+              addition LESS_THAN addition
               |
-              expr LESS_THAN factor
+              addition LESS_THAN_OR_EQUAL addition
               |
-              expr EQUAL factor
+              addition EQUAL addition
               |
-              expr PLUS factor
+              addition NOT_EQUAL addition
               |
-              expr MINUS factor
+              addition
+              ;
+
+addition  ::= addition PLUS factor
               |
-              expr OR factor
+              addition MINUS factor
+              |
+              addition OR factor
               | 
               factor
               ;
@@ -209,41 +252,70 @@ factor    ::= factor TIMES term
               term
               ;
 
-term      ::= ID
-              |
-              ID LBRACKET expr_list RBRACKET
+term      ::= literal
               | 
-              LBRACKET expr RBRACKET  /* ((4+3)*5) */           
-              |
-              ID LBRACE constant RBRACE /* ARRAY CALL */
-              |
-              NUMBER
-              ;
-
-constants ::= constants SEMI constant
+              NOT term
               | 
-              constant
-              ;
-
-constant  ::= NUMBER DOTS NUMBER
+              LPAR expr RPAR  /* ((4+3)*5) */
+              | 
+              function_call
               |
-              ID DOTS ID
+              variable
               ;
 
-expr_list ::= expr_list SEMI expr
+literal   ::= STRING_LITERAL
+              | 
+              BOOLEAN_LITERAL
+              | 
+              FLOAT_LITERAL
+              |
+              CHAR_LITERAL
+              | 
+              INT_LITERAL 
+              ;
+
+function_call ::= ID LPAR expr_list RPAR
+              ;
+         
+variable      ::= ID accesor_list    
+              ;
+
+accesor_list ::= 
+              DOT ID accesor_list 
+              |
+              LBRACKET expr_list RBRACKET accesor_list
+              |
+              ;
+
+expr_list     ::= expr_list SEMI expr
               | 
               expr
               ;
 
-type      ::= ARRAY LBRACE constant RBRACE OF type
+type          ::= ARRAY LBRACKET expr_list RBRACKET OF type
+              |
+              RECORD decl_list END
               |
               STRING
               |
-              REAL
+              CHAR
+              |
+              FLOAT
               |
               INT
               |
               BOOL
-              | 
+              |
               ID
+              |
+              VOID 
+              ;
+
+decl_param    ::= ids COLON type SEMICOLON
+              ;
+
+decl_list     ::= 
+              decl_list decl_param
+              |
+              decl_param
               ;

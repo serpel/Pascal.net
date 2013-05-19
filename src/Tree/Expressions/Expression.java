@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Tree;
+package Tree.Expressions;
 
 /**
  *
  * @author SergioJavier
  */
-public class Block {
+public abstract class Expression {
     
 }

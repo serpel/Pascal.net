@@ -5,7 +5,14 @@
 program Sort(input, output);
     type 
         (* Type of the element array. *)
-        IntArrType := array [1..50] of int;
+        IntArrType = array[50] of int;
+
+        (* Register *)
+        alumnos = record 
+                    name :string;
+                    id :int;
+                    edad :int;
+                  end;
 
     var
         (* Indexes, exchange temp, array size. *)
@@ -14,32 +21,52 @@ program Sort(input, output);
         (* Array of ints *)
         arr: IntArrType;
 
+        test: array[50] of alumnos;
+
+
     (* Read in the integers. *)
-    function ReadArr(var size: Integer; var a: IntArrType):string;
-        begin
+    function ReadArr(var size: Integer; var a: IntArrType; var flag: bool):string;
+    begin
+            flag := true;
             size := 1;
             while (eof > 1) do 
             begin
                 readln(a);
+                writeln(a[0]);
                 if (eof > 1) then 
-                    size := size + 1
+                begin
+                    size := size + 1;
+                end
                 else
-                    size := 1
+                begin
+                    size := 1;
+                end
             end
-        end;
+    end;
+
+   function readAlumnos(var al: test):string;
+    begin
+         al.id := 234;
+         al[1] := 'sdsd';
+    end;
 
     begin
         (* Read *)
         ReadArr(size, arr);
-
+   
         (* Sort using bubble sort. *)
-        for i := size - 1 downto 1 do
+        for i := size - 1 to 1 do
+        begin
             for j := 1 to i do
             begin
-                if (test > 3) then
-                   test := 2
+                if ( (test > ((5 + 3)* 4)/34) !=  1 ) then
+                begin
+                   test := 2;
+                end
                 else 
-                   test := 1
+                begin
+                   test := 1;
+               end
             end
-       
-    end.
+        end 
+    end .

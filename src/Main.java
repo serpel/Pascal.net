@@ -9,18 +9,6 @@
   by Gerwin Klein
 */
 
-/*
-  Commented By: Christopher Lopes
-  File Name: Main.java
-  To Create: 
-  After the scanner, lcalc.flex, and the parser, ycalc.cup, have been created.
-  > javac Main.java
-  
-  To Run: 
-  > java Main test.txt
-  where test.txt is an test input file for the calculator.
-*/
-
 import java.io.*;
    
 public class Main {
