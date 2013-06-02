@@ -4,27 +4,31 @@
  */
 package Tree.Expressions;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author SergioJavier
  */
-public class Id extends Expression {
-    String Identifier;
+public class FieldAccess extends Expression{
 
-    public Id(String Identifier) {
-        this.Identifier = Identifier;
+    Id atribute;
+
+    public FieldAccess(Id atribute) {
+        this.atribute = atribute;
     }
 
-    public String getIdentifier() {
-        return Identifier;
+    public Id getAtribute() {
+        return atribute;
     }
 
-    public void setIdentifier(String Identifier) {
-        this.Identifier = Identifier;
-    }
+    public void setAtribute(Id atribute) {
+        this.atribute = atribute;
+    }  
 
     @Override
     public void semanticValidation() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
 }

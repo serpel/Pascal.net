@@ -2,7 +2,7 @@ program raiz(input, output);
  (*Obtener la raíz cuadrada de un número real x cualquiera.*)
  
  var 
-    x, y: real;
+    x, y: float;
     respuesta: string;
  
  begin

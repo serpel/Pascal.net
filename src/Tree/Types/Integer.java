@@ -9,5 +9,10 @@ package Tree.Types;
  * @author SergioJavier
  */
 public class Integer extends Type{
+
+    @Override
+    public java.lang.String toAssably() {
+        return "int32";
+    }
     
 }

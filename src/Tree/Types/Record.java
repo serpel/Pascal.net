@@ -6,12 +6,14 @@ package Tree.Types;
 
 import Tree.Statemens.Statement;
 import Tree.Declarations.Declarations;
+import java.util.ArrayList;
 
 /**
  *
  * @author SergioJavier
  */
 public class Record extends Type{
+    
     Declarations decls;
 
     public Record(Declarations decls) {
@@ -24,6 +26,11 @@ public class Record extends Type{
 
     public void setDecls(Declarations decls) {
         this.decls = decls;
+    }   
+
+    @Override
+    public java.lang.String toAssably() {
+        return "";
     }
     
 }

@@ -4,7 +4,9 @@
  */
 package Tree.Statemens;
 
+import Semantic.*;
 import Tree.Expressions.Expression;
+import Tree.Types.*;
 
 /**
  *
@@ -14,8 +16,7 @@ public class WhileStms extends Statement{
     Expression param;
     Statement stms;
 
-    public WhileStms(Expression param, Statement stms, Statement next) {
-        super(next);
+    public WhileStms(Expression param, Statement stms) {
         this.param = param;
         this.stms = stms;
     }
@@ -34,6 +35,21 @@ public class WhileStms extends Statement{
 
     public void setStms(Statement stms) {
         this.stms = stms;
+    }
+
+    @Override
+    public void semanticValidation() {
+        
+        Env.newEnv();     
+        
+        if(!(this.param.getType() instanceof Bool) || !(this.param.getType() instanceof Tree.Types.Integer))
+        {
+            ErrorLog.getInstance().add("Error: Instruccion While no soporta tipo "+this.param.getType().toString());
+        }    
+        
+        stms.semanticValidation();
+            
+        Env.restoreEnv();
     }
     
 }

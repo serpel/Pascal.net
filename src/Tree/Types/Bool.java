@@ -9,5 +9,10 @@ package Tree.Types;
  * @author SergioJavier
  */
 public class Bool extends Type{
+
+    @Override
+    public java.lang.String toAssably() {
+        return "Bool";
+    }
     
 }

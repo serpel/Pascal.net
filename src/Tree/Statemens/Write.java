@@ -13,9 +13,20 @@ import Tree.Expressions.Expression;
 public class Write extends Statement{
     Expression param;
 
-    public Write(Expression param, Statement next) {
-        super(next);
+    public Write(Expression param) {
         this.param = param;
     }
-    
+
+    public Expression getParam() {
+        return param;
+    }
+
+    public void setParam(Expression param) {
+        this.param = param;
+    } 
+
+    @Override
+    public void semanticValidation() {
+        param.semanticValidation();
+    }
 }

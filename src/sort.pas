@@ -69,4 +69,20 @@ program Sort(input, output);
                end
             end
         end 
+
+
+
+        case letra of
+
+            'a': begin 
+                     gotoxy(50,5); writeln('aguila'); readln(i); 
+                 end
+            'c': begin
+                     gotoxy(50,5); write('caballo '); writeln('camello'); readln(i); 
+                 end
+            else begin
+                     writeln('else case');
+                 end
+               
+         end
     end .

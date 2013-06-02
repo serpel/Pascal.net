@@ -5,7 +5,6 @@
 package Tree.Statemens;
 
 import Tree.Expressions.Expression;
-import java.util.ArrayList;
 
 /**
  *
@@ -13,15 +12,15 @@ import java.util.ArrayList;
  */
 public class Case extends Statement {
     
-    ArrayList<Expression> exprs;
+    Expression exprs;
     Statement stms;
 
-    public Case(ArrayList<Expression> exprs, Statement next) {
-        super(next);
+    public Case(Expression exprs, Statement stms) {
         this.exprs = exprs;
+        this.stms = stms;
     }
 
-    public ArrayList<Expression> getExprs() {
+    public Expression getExprs() {
         return exprs;
     }
 
@@ -29,13 +28,16 @@ public class Case extends Statement {
         return stms;
     }
 
-    public void setExprs(ArrayList<Expression> exprs) {
+    public void setExprs(Expression exprs) {
         this.exprs = exprs;
     }
 
     public void setStms(Statement stms) {
         this.stms = stms;
-    }
+    }    
 
-    
+    @Override
+    public void semanticValidation() {
+        this.stms.semanticValidation();
+    }
 }

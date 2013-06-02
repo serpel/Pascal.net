@@ -4,8 +4,9 @@
  */
 package Tree.Declarations;
 
+import Tree.Expressions.Expression;
 import Tree.Statemens.Assign;
-import java.util.ArrayList;
+import Tree.Types.Type;
 
 /**
  *
@@ -13,19 +14,28 @@ import java.util.ArrayList;
  */
 public class TypeDecl extends Declarations{
     
-    ArrayList<Assign> lass;
+    Expression ids;
+    Type t;
 
-    public TypeDecl(ArrayList<Assign> lass, Declarations next) {
-        super(next);
-        this.lass = lass;
+    public TypeDecl(Expression ids, Type t) {
+        this.ids = ids;
+        this.t = t;
     }
 
-    public ArrayList<Assign> getLass() {
-        return lass;
+    public Expression getIds() {
+        return ids;
     }
 
-    public void setLass(ArrayList<Assign> lass) {
-        this.lass = lass;
+    public Type getT() {
+        return t;
+    }
+
+    public void setIds(Expression ids) {
+        this.ids = ids;
+    }
+
+    public void setT(Type t) {
+        this.t = t;
     }
     
 }

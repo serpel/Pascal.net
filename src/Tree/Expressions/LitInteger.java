@@ -10,19 +10,24 @@ package Tree.Expressions;
  */
 public class LitInteger extends Expression {
     
-    int lInteger;
+    int value;
 
-    public LitInteger(int lInteger) {
-        this.lInteger = lInteger;
+    public LitInteger(int value) {
+        this.value = value;
+        this.setType(new Tree.Types.Integer());
     }
 
-    public int getlInteger() {
-        return lInteger;
+    public int getValue() {
+        return value;
     }
 
-    public void setlInteger(int lInteger) {
-        this.lInteger = lInteger;
+    public void setValue(int value) {
+        this.value = value;
     }
-    
+
+    @Override
+    public void semanticValidation() {
+        
+    }   
     
 }

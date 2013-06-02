@@ -13,8 +13,7 @@ import Tree.Expressions.Expression;
 public class Read extends Statement{
     Expression param;
 
-    public Read(Expression param, Statement next) {
-        super(next);
+    public Read(Expression param) {
         this.param = param;
     }
 
@@ -24,6 +23,11 @@ public class Read extends Statement{
 
     public Expression getParam() {
         return param;
+    }
+
+    @Override
+    public void semanticValidation() {
+        param.semanticValidation();
     }
     
 }

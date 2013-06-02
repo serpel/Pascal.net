@@ -4,24 +4,32 @@
  */
 package Tree.Expressions;
 
+import Tree.Types.Char;
+
 /**
  *
  * @author SergioJavier
  */
 public class LitChar extends Expression {
     
-    char lChar;
+    char value;
 
-    public LitChar(char lChar) {
-        this.lChar = lChar;
+    public LitChar(char value) {
+        this.value = value;
+        this.setType(new Char());
     }
 
-    public char getlChar() {
-        return lChar;
+    public char getValue() {
+        return value;
     }
 
-    public void setlChar(char lChar) {
-        this.lChar = lChar;
+    public void setlValue(char value) {
+        this.value = value;
+    }
+
+    @Override
+    public void semanticValidation() {
+        
     }
     
 }

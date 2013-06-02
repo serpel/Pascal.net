@@ -5,17 +5,19 @@
 package Tree.Declarations;
 
 import Tree.Expressions.Expression;
+import Tree.Statemens.Statement;
 import Tree.Types.Type;
 
 /**
  *
  * @author SergioJavier
  */
-public class VarDecl extends Declarations{
+public class RefVar extends Declarations{
+    
     Expression ids;
     Type t;
 
-    public VarDecl(Expression ids, Type t) {
+    public RefVar(Expression ids, Type t) {
         this.ids = ids;
         this.t = t;
     }

@@ -2,17 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Tree.Types;
+package Tree.Expressions;
 
 /**
  *
  * @author SergioJavier
  */
-public class Custom extends Type{
+public class Equal extends BinaryOp{
 
-    @Override
-    public java.lang.String toAssably() {
-        return "Object";
+    public Equal(Expression left, Expression right) {
+        super(left, right);
     }
     
 }

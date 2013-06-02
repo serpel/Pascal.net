@@ -4,24 +4,32 @@
  */
 package Tree.Expressions;
 
+import Tree.Types.Bool;
+
 /**
  *
  * @author SergioJavier
  */
 public class LitBool extends Expression {
     
-    Boolean lbool;
+    Boolean value;
 
-    public LitBool(Boolean lbool) {
-        this.lbool = lbool;
+    public LitBool(Boolean value) {
+        this.value = value;
+        this.setType(new Bool());
     }
 
-    public Boolean getLbool() {
-        return lbool;
+    public Boolean getValue() {
+        return value;
     }
 
-    public void setLbool(Boolean lbool) {
-        this.lbool = lbool;
+    public void setValue(Boolean value) {
+        this.value = value;
+    }
+
+    @Override
+    public void semanticValidation() { 
+        
     }
    
 }

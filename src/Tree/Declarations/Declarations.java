@@ -8,13 +8,8 @@ package Tree.Declarations;
  *
  * @author SergioJavier
  */
-public abstract class Declarations {
-    
-    Declarations next;
-
-    public Declarations(Declarations next) {
-        this.next = next;
-    }
+public abstract class Declarations {   
+    Declarations next=null;
 
     public void setNext(Declarations next) {
         this.next = next;

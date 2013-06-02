@@ -2,16 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Tree.Expressions;
+package Tree.Types;
 
 /**
  *
  * @author SergioJavier
  */
-public class E extends BinaryOp{
-
-    public E(Expression left, Expression right) {
-        super(left, right);
+public class Null extends Type{
+    
+    @Override
+    public java.lang.String toAssably() {
+        return "int32";
     }
     
 }

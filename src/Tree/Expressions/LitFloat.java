@@ -8,26 +8,26 @@ package Tree.Expressions;
  *
  * @author SergioJavier
  */
-public class LitString extends Expression {
+public class LitFloat extends Expression{
     
-    String value;
+    float value;
 
-    public LitString(String value) {
+    public LitFloat(float value) {
         this.value = value;
-        this.setType(new Tree.Types.String());
+        this.setType(new Tree.Types.Float());
     }
 
-    public String getValue() {
+    public float getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(float value) {
         this.value = value;
     }
 
     @Override
     public void semanticValidation() {
-        
+     
     }
-       
+    
 }

@@ -4,7 +4,10 @@
  */
 package Tree.Statemens;
 
-import java.beans.Expression;
+import Semantic.Env;
+import Semantic.ErrorLog;
+import Tree.Expressions.Expression;
+import Tree.Types.Bool;
 
 /**
  *
@@ -13,9 +16,9 @@ import java.beans.Expression;
 public class RepeatStms extends Statement{
     Expression param;
     Statement stms;
+    
 
-    public RepeatStms(Expression param, Statement stms, Statement next) {
-        super(next);
+    public RepeatStms(Expression param, Statement stms) {
         this.param = param;
         this.stms = stms;
     }
@@ -35,5 +38,21 @@ public class RepeatStms extends Statement{
     public void setStms(Statement stms) {
         this.stms = stms;
     }
-    
+
+    @Override
+    public void semanticValidation() {
+        
+        Env.newEnv();     
+        
+        if(!(this.param.getType() instanceof Bool) || !(this.param.getType() instanceof Tree.Types.Integer))
+        {
+            ErrorLog.getInstance().add("Error: Instruccion While no soporta tipo "+this.param.getType().toString());
+        }    
+        
+        stms.semanticValidation();
+            
+        Env.restoreEnv();
+        
+    }
+
 }

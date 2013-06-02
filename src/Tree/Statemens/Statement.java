@@ -4,17 +4,16 @@
  */
 package Tree.Statemens;
 
+import Semantic.Environment;
+
 /**
  *
  * @author SergioJavier
  */
-public abstract class Statement {
+public abstract class Statement { 
+    Statement next=null;
     
-    Statement next;
-
-    public Statement(Statement next) {
-        this.next = next;
-    }
+    public abstract void semanticValidation();  
 
     public void setNext(Statement next) {
         this.next = next;

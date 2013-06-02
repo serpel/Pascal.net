@@ -1,14 +1,12 @@
-
-
-
-   
-
 import java_cup.runtime.*;
 import java.util.ArrayList;
+import Tree.Declarations.*;
+import Tree.Statemens.*;
+import Tree.Expressions.*;
+import Tree.Types.Type;
 
 parser code {:
-    
-  
+
     public void report_error(String message, Object info) {
    
        
@@ -66,256 +64,396 @@ non terminal productions principales
 -------------------------------------
 */
 
-non terminal Object program;
-non terminal Object block;
-non terminal Object decl_seq;
-non terminal Object parameter;
-non terminal Object statement;
-non terminal Object expr;
-non terminal Object factor;
-non terminal Object term;
-non terminal Object constant;
-non terminal Object type;
-non terminal Object compound;
-non terminal Object case_list;
-non terminal Object case;
-non terminal Object caselabel;
-non terminal Object addition;
-non terminal Object literal;
-non terminal Object stms; 
-non terminal Object functions;
-non terminal Object function;
-non terminal Object const_list;
-non terminal Object const_decl;
-non terminal Object type_list;
-non terminal Object type_decl;
-non terminal Object type_body;
-non terminal Object var_decl;
-non terminal Object decl_param;
-non terminal Object decl_list;
-non terminal Object params;
-non terminal Object param;
-non terminal Object ids;
-non terminal Object expr_list;
-non terminal Object function_call;
-non terminal Object accesor_list;
-non terminal Object variable;
+non terminal Declarations program;
+non terminal Declarations block;
+non terminal ArrayList<Declarations> decl_seq;
+non terminal Declarations functions;
+non terminal Declarations function;
+non terminal Declarations constant;
+non terminal Declarations const_list;
+non terminal Declarations const_decl;
+non terminal Declarations type_list;
+non terminal Declarations type_decl;
+non terminal Declarations type_body;
+non terminal Declarations var_decl;
+non terminal Declarations decl_param;
+non terminal Declarations decl_list;
+non terminal Declarations params;
+non terminal Declarations parameter;
+non terminal Declarations param;
+
+non terminal Expression expr;
+non terminal Expression expr_list;
+non terminal Expression function_expr;
+non terminal Expression factor;
+non terminal Expression term;
+non terminal Expression addition;
+non terminal Expression literal;
+non terminal Expression ids;
+non terminal Expression accesor_list;
+non terminal Expression variable;
+
+non terminal Statement stms; 
+non terminal Statement statement;
+non terminal Statement compound;
+non terminal Statement function_stms;
+non terminal Statement else;
+non terminal Statement case_list;
+non terminal Statement case;
+
+non terminal Type type;
 
 /* BEGIN */
 
-program   ::= PROGRAM ID parameter SEMICOLON block DOT
+program   ::= PROGRAM ID:i parameter:p SEMICOLON block:b DOT
+              {: RESULT=new Program(new Id(i),p,b); :}
               |
+              {: RESULT=null; :}
               ;
                        
-block     ::= decl_seq compound
+block     ::= decl_seq:d compound:c
+              {: 
+                RESULT=new Block(d,c); 
+              :}
               ;
 
-decl_seq  ::= constant type_decl var_decl functions               
+decl_seq  ::= constant:c type_decl:t var_decl:v functions:f   
+              {: 
+                ArrayList<Declarations> d = new ArrayList<>();
+                
+                if(c!=null){
+                    d.add(c);
+                }
+                if(t!=null){
+                    d.add(t);
+                }
+                if(v!=null){
+                    d.add(v);
+                }
+                if(f!=null){
+                    d.add(f);
+                }
+
+                RESULT=d;
+              :}            
               ;
 
-//----------------------------
-constant  ::= CONST const_list
+//--------DECLARATIONS--------------------
+constant  ::= CONST const_list:l
+              {: RESULT=l; :}
               | 
               ;
 
-type_decl ::= TYPE type_list
+type_decl ::= TYPE type_list:t
+              {: RESULT=t; :}
               |
               ;
 
-var_decl  ::= VAR decl_list 
+var_decl  ::= VAR decl_list:d 
+              {: RESULT=d; :}
               |
               ;
 
-//------------------------------
-
-const_list::= const_list const_decl
-              |
-              const_decl
-              ;
-
-const_decl::= ID EQUAL literal SEMICOLON
-              ;
-
-
-functions ::= function functions
+const_list::= const_decl:c const_list:l 
+              {: 
+                c.setNext(l);
+                RESULT=c; 
+              :}
               |
               ;
 
-function  ::= FUNCTION ID parameter COLON type SEMICOLON compound SEMICOLON
+const_decl::= ID:i EQUAL literal:l SEMICOLON
+              {: RESULT=new ConstDecl(new Id(i),l); :}
               ;
- 
-type_list ::= type_list type_body 
+
+type_list ::= type_body:b type_list:l
+              {: 
+                b.setNext(l);
+                RESULT=b; 
+              :}
               |
-              type_body 
+              ;
+
+functions ::= function:f functions:fs
+              {: 
+                f.setNext(fs);
+                RESULT=f; 
+              :}
+              |
+              ;
+
+function  ::= FUNCTION ID:i parameter:p COLON type:t SEMICOLON compound:c SEMICOLON
+              {: RESULT=new FunctionDecl(new Id(i),p,t,c); :}
               ;
       
-type_body ::= ID EQUAL type SEMICOLON
+type_body ::= ID:i EQUAL type:t SEMICOLON
+              {: RESULT=new TypeDecl(new Id(i),t); :}
               ;
 
-parameter ::= LPAR params RPAR
+parameter ::= LPAR params:p RPAR
+              {: RESULT=p; :}
               |
+              {: RESULT=null; :}
               ;
 
-params    ::= params SEMICOLON param
+params    ::= param:p SEMICOLON params:prs
+              {:
+                p.setNext(prs);
+                RESULT=p; 
+              :}
               |
-              param
+              param:p
+              {: RESULT=p; :}  
               ; 
 
-param     ::= REF VAR ids COLON type
+param     ::= REF VAR ids:i COLON type:t
+              {: RESULT=new RefVar(i,t); :}
               |
-              VAR ids COLON type
+              VAR ids:i COLON type:t
+              {: RESULT=new VarDecl(i,t); :}
               |
-              ids
+              ids:i
+              {: RESULT=new IdDecl(i); :}
+              |
               ;
 
-ids       ::= ID SEMI ids 
+ids       ::= ID:i SEMI ids:id 
+              {:
+                Id tmp = new Id(i);
+                tmp.setNext(id);
+                RESULT=tmp; 
+              :} 
               |
-              ID
+              ID:i
+              {: RESULT=new Id(i); :}
               ;
 
-stms      ::= stms statement   
-              |
-              statement             
+//--------STATEMENTS-----------
+stms      ::= statement:s stms:s1
+              {:
+                s.setNext(s1);
+                RESULT=s; 
+              :}  
+              |         
               ;
 
-statement ::= function_call SEMICOLON
+statement ::= function_stms:f SEMICOLON
+              {: RESULT=f; :} 
               |
-              variable ASSIGN expr SEMICOLON /* ARRAY ASSIGN OR ID ASSIGN*/
+              variable:l ASSIGN expr:r SEMICOLON /* ARRAY ASSIGN OR ID ASSIGN*/
+              {: RESULT=new Assign(l,r); :} 
               |
-              IF expr THEN compound ELSE compound 
+              IF expr:e THEN compound:c1 ELSE compound:c2
+              {: RESULT=new IfStms(e,c1,c2); :} 
               |
-              IF expr THEN compound 
+              IF expr:e THEN compound:c 
+              {: RESULT=new IfStms(e,c,null); :} 
               |
               CASE expr OF 
                  case_list
+                 else
               END
+              {: RESULT=null; :} 
               |
-              WHILE expr DO compound 
+              WHILE expr:e DO compound:c 
+              {: RESULT=new WhileStms(e,c); :}  
               |
-              FOR ID ASSIGN expr TO expr DO compound
+              FOR ID:i ASSIGN expr:r TO expr:e DO compound:c
+              {: RESULT=new ForStms(new Assign(new Id(i),r),e,c); :}  
               |
-              REPEAT compound UNTIL expr  SEMICOLON     
+              REPEAT compound:c UNTIL expr:e SEMICOLON   
+              {: RESULT=new RepeatStms(e,c); :}  
               |
-              WRITELN LPAR expr RPAR SEMICOLON 
+              WRITELN LPAR expr:e RPAR SEMICOLON 
+              {: RESULT=new Write(e); :}
               |
-              READLN LPAR ID RPAR SEMICOLON 
+              READLN LPAR ID:i RPAR SEMICOLON
+              {: RESULT=new Read(new Id(i)); :}
               ;
 
-case_list ::= case_list case
+else      ::= ELSE compound:c
+              {: RESULT=c; :}
               |
-              case
               ;
 
-case      ::= caselabel COLON compound 
+case_list ::= case:c case_list:l
+              {: 
+                c.setNext(l);
+                RESULT=c; 
+              :}
+              |
               ;
 
-caselabel ::= caselabel SEMI expr
-              |
-              expr
+case      ::= expr_list:l COLON compound:c
+              {: RESULT= new Case(l,c); :}
               ;
 
-compound  ::= BEGIN stms END
+compound  ::= BEGIN stms:s END
+              {: RESULT=s; :}
               ;
 
-expr      ::= addition GREATER_THAN_OR_EQUAL addition
+//------- Expressions-------------------------
+expr      ::= addition:l GREATER_THAN_OR_EQUAL addition:r
+              {: RESULT= new GE(l,r); :}
               |
-              addition GREATER_THAN addition
+              addition:l GREATER_THAN addition:r
+              {: RESULT= new G(l,r); :}
               |
-              addition LESS_THAN addition
+              addition:l LESS_THAN addition:r
+              {: RESULT= new L(l,r); :}
               |
-              addition LESS_THAN_OR_EQUAL addition
+              addition:l LESS_THAN_OR_EQUAL addition:r
+              {: RESULT= new LE(l,r); :}
               |
-              addition EQUAL addition
+              addition:l EQUAL addition:r
+              {: RESULT= new Equal(l,r); :}
               |
-              addition NOT_EQUAL addition
+              addition:l NOT_EQUAL addition:r
+              {: RESULT= new NotEqual(l,r); :}
               |
-              addition
+              addition:a
+              {: RESULT=a; :}
               ;
 
-addition  ::= addition PLUS factor
+addition  ::= addition:l PLUS factor:r
+              {: RESULT= new Sum(l,r); :}
               |
-              addition MINUS factor
+              addition:l MINUS factor:r
+              {: RESULT= new Sub(l,r); :}
               |
-              addition OR factor
+              addition:l OR factor:r
+              {: RESULT= new Or(l,r); :}
               | 
-              factor
+              factor:f
+              {: RESULT=f; :}
               ;
 
-factor    ::= factor TIMES term
+factor    ::= factor:l TIMES term:r
+              {: RESULT= new Mul(l,r); :}
               |
-              factor DIVIDE term
+              factor:l DIVIDE term:r
+              {: RESULT= new Div(l,r); :}
               |              
-              factor MOD term
+              factor:l MOD term:r
+              {: RESULT= new Mod(l,r); :}
               |
-              factor AND term
+              factor:l AND term:r
+              {: RESULT= new And(l,r); :}
               |
-              term
+              term:t
+              {: RESULT=t; :}
               ;
 
-term      ::= literal
+term      ::= literal:l
+              {: RESULT=l; :}
               | 
-              NOT term
+              NOT term:e
+              {: RESULT=new Not(e); :}
               | 
-              LPAR expr RPAR  /* ((4+3)*5) */
+              LPAR expr:e RPAR
+              {: RESULT=e; :}  /* ((4+3)*5) */
               | 
-              function_call
+              function_expr:f
+              {: RESULT=f; :}
               |
-              variable
+              variable:v
+              {: RESULT=v; :}
               ;
 
-literal   ::= STRING_LITERAL
+literal   ::= STRING_LITERAL:sl
+              {: RESULT=new LitString(sl); :}
               | 
-              BOOLEAN_LITERAL
+              BOOLEAN_LITERAL:bl
+              {: RESULT=new LitBool(bl); :}
               | 
-              FLOAT_LITERAL
+              FLOAT_LITERAL:fl
+              {: RESULT=new LitFloat(fl); :}
               |
-              CHAR_LITERAL
+              CHAR_LITERAL:cl
+              {: RESULT=new LitChar(cl); :}
               | 
-              INT_LITERAL 
+              INT_LITERAL:il
+              {: RESULT=new LitInteger(il); :}
               ;
 
-function_call ::= ID LPAR expr_list RPAR
+function_expr ::= ID:i LPAR expr_list:e RPAR
+              {: RESULT=new FunctionExpr(new Id(i),e); :}
+              ;
+
+function_stms ::= ID:i LPAR expr_list:e RPAR
+              {: RESULT=new FunctionStms(new Id(i),e); :}
               ;
          
-variable      ::= ID accesor_list    
+variable      ::= ID:i accesor_list:a
+              {: RESULT=new Variable(new Id(i),a); :}    
               ;
 
 accesor_list ::= 
-              DOT ID accesor_list 
+              DOT ID:i accesor_list:r
+              {: 
+                FieldAccess tmp = new FieldAccess(new Id(i));
+                tmp.setNext(r);
+                RESULT=tmp; 
+              :}    
               |
-              LBRACKET expr_list RBRACKET accesor_list
-              |
+              LBRACKET expr_list:e RBRACKET accesor_list:r
+              {: 
+                ArrayExpr a = new ArrayExpr(e);
+                a.setNext(r);
+                RESULT=a; 
+              :}    
+              |  
               ;
 
-expr_list     ::= expr_list SEMI expr
+expr_list     ::= expr:e SEMI expr_list:l
+              {: 
+                e.setNext(l);
+                RESULT=e; 
+              :}   
               | 
-              expr
+              expr:e
+              {:    
+                 RESULT=e; 
+              :}    
               ;
 
-type          ::= ARRAY LBRACKET expr_list RBRACKET OF type
+type          ::= ARRAY LBRACKET expr_list:l RBRACKET OF type:t
+              {: RESULT=new Tree.Types.Array(l,t); :}    
               |
-              RECORD decl_list END
+              RECORD decl_list:l END
+              {: RESULT=new Tree.Types.Record(l); :}    
               |
               STRING
+              {: RESULT=new Tree.Types.String(); :}    
               |
               CHAR
+              {: RESULT=new Tree.Types.Char(); :}    
               |
               FLOAT
+              {: RESULT=new Tree.Types.Float(); :}    
               |
               INT
+              {: RESULT=new Tree.Types.Integer(); :}    
               |
               BOOL
+              {: RESULT=new Tree.Types.Bool(); :}    
               |
               ID
+              {: RESULT=new Tree.Types.Custom(); :}    
               |
               VOID 
+              {: RESULT=new Tree.Types.Void(); :}    
               ;
 
-decl_param    ::= ids COLON type SEMICOLON
+decl_param    ::= ids:i COLON type:t SEMICOLON
+              {: RESULT=new VarDecl(i, t); :}    
               ;
 
 decl_list     ::= 
-              decl_list decl_param
-              |
-              decl_param
+              decl_param:p decl_list:l
+              {: 
+                p.setNext(l); 
+                RESULT=p;
+              :}    
+              |   
               ;

@@ -5,40 +5,44 @@
 package Tree.Types;
 
 import Tree.Expressions.Expression;
-import java.util.ArrayList;
 
 /**
  *
  * @author SergioJavier
  */
-public class Array extends Type{
-    Expression exprs;
-    Type t;
+public class Function extends Type{
 
-    public Array(Expression exprs, Type t) {
+    Expression exprs;
+
+    public Function(Expression exprs) {
         this.exprs = exprs;
-        this.t = t;
     }
 
     public Expression getExprs() {
         return exprs;
     }
 
-    public Type getT() {
-        return t;
-    }
-
     public void setExprs(Expression exprs) {
         this.exprs = exprs;
     }
-
-    public void setT(Type t) {
-        this.t = t;
+    
+    public int count()
+    {
+        Expression e = this.exprs;
+        
+        int cont = 0;
+        while(e!=null)
+        {
+            cont++;
+            e = e.getNext();
+        }
+        
+        return cont;
     }
-
+    
     @Override
     public java.lang.String toAssably() {
-        return "Array";
+        return "function";
     }
-
+    
 }

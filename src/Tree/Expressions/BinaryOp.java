@@ -32,7 +32,14 @@ public class BinaryOp extends Expression{
     public void setRight(Expression right) {
         this.right = right;
     }
-    
-    
+
+    @Override
+    public void semanticValidation() {
+        
+        if(left.getType() != right.getType())
+        {
+            System.out.println("Tipos Incompatibles");
+        }
+    }  
     
 }
