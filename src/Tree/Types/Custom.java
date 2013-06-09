@@ -15,4 +15,9 @@ public class Custom extends Type{
         return "Object";
     }
     
+    @Override
+    public java.lang.String toStr() {
+        return "Object";
+    }
+    
 }

@@ -11,5 +11,6 @@ package Tree.Types;
 public abstract class Type {
     
     public abstract java.lang.String toAssably();
+    public abstract java.lang.String toStr();
     
 }

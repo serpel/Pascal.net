@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import Tree.Declarations.*;
 import Tree.Statemens.*;
 import Tree.Expressions.*;
+import Tree.Types.Custom;
 import Tree.Types.Type;
 
 parser code {:
@@ -183,7 +184,7 @@ functions ::= function:f functions:fs
               ;
 
 function  ::= FUNCTION ID:i parameter:p COLON type:t SEMICOLON compound:c SEMICOLON
-              {: RESULT=new FunctionDecl(new Id(i),p,t,c); :}
+              {: RESULT=new FunctionDecl(new Id(i),new Tree.Types.Function(p),c); :}
               ;
       
 type_body ::= ID:i EQUAL type:t SEMICOLON
@@ -213,7 +214,7 @@ param     ::= REF VAR ids:i COLON type:t
               {: RESULT=new VarDecl(i,t); :}
               |
               ids:i
-              {: RESULT=new IdDecl(i); :}
+              {: RESULT=new IdDecl("test",new Custom()); :}
               |
               ;
 
@@ -249,11 +250,11 @@ statement ::= function_stms:f SEMICOLON
               IF expr:e THEN compound:c 
               {: RESULT=new IfStms(e,c,null); :} 
               |
-              CASE expr OF 
-                 case_list
-                 else
+              CASE expr:ex OF 
+                 case_list:cl
+                 else:e
               END
-              {: RESULT=null; :} 
+              {: RESULT=new Switch(ex,cl,e); :} 
               |
               WHILE expr:e DO compound:c 
               {: RESULT=new WhileStms(e,c); :}  
@@ -385,7 +386,11 @@ function_stms ::= ID:i LPAR expr_list:e RPAR
               ;
          
 variable      ::= ID:i accesor_list:a
-              {: RESULT=new Variable(new Id(i),a); :}    
+              {:
+                Id tmp = new Id(i);
+                tmp.setRight(a);
+                RESULT=tmp; 
+              :}    
               ;
 
 accesor_list ::= 

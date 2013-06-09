@@ -15,4 +15,9 @@ public class Void extends Type{
         return "Void";
     }
     
+    @Override
+    public java.lang.String toStr() {
+        return "Void";
+    }
+    
 }

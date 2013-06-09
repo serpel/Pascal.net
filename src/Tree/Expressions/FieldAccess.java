@@ -4,8 +4,6 @@
  */
 package Tree.Expressions;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author SergioJavier
@@ -24,11 +22,11 @@ public class FieldAccess extends Expression{
 
     public void setAtribute(Id atribute) {
         this.atribute = atribute;
-    }  
+    } 
 
     @Override
     public void semanticValidation() {
         throw new UnsupportedOperationException("Not supported yet.");
-    }
+    }   
     
 }

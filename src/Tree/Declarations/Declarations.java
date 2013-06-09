@@ -19,4 +19,17 @@ public abstract class Declarations {
         return next;
     }
     
+    public abstract void semanticValidation();   
+    
+    public void semantic()
+    {
+        this.semanticValidation();
+        
+        if(next!= null)
+        {
+            next.semantic();
+        }
+    }
+            
+           
 }

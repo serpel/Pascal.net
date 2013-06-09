@@ -10,7 +10,7 @@ import Tree.Types.Char;
  *
  * @author SergioJavier
  */
-public class LitChar extends Expression {
+public class LitChar extends Literal {
     
     char value;
 
@@ -25,11 +25,5 @@ public class LitChar extends Expression {
 
     public void setlValue(char value) {
         this.value = value;
-    }
-
-    @Override
-    public void semanticValidation() {
-        
-    }
-    
+    }  
 }

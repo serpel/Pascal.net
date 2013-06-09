@@ -43,5 +43,10 @@ public class Program extends Declarations{
     public void setBllock(Block bl) {
         this.block = bl;
     }
+
+    @Override
+    public void semanticValidation() {   
+        this.block.semantic();
+    }
     
 }

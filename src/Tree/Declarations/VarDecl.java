@@ -4,7 +4,10 @@
  */
 package Tree.Declarations;
 
+import Semantic.Env;
 import Tree.Expressions.Expression;
+import Tree.Expressions.Id;
+import Tree.Types.Custom;
 import Tree.Types.Type;
 
 /**
@@ -34,6 +37,19 @@ public class VarDecl extends Declarations{
 
     public void setT(Type t) {
         this.t = t;
+    }
+
+    @Override
+    public void semanticValidation() {
+        
+        Expression e=ids;
+        while(e!=null)
+        {
+            Id i = (Id)e;
+            Env.getIntance().put(i.getIdentifier(), t);
+            
+            e=e.getNext();
+        }
     }
     
 }

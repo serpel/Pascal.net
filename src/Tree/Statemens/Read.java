@@ -4,7 +4,10 @@
  */
 package Tree.Statemens;
 
+import Semantic.Env;
+import Semantic.ErrorLog;
 import Tree.Expressions.Expression;
+import Tree.Expressions.Id;
 
 /**
  *
@@ -27,6 +30,15 @@ public class Read extends Statement{
 
     @Override
     public void semanticValidation() {
+          
+//        if(this.param instanceof Id)
+//        {
+//            String id = ((Id)param).getIdentifier();
+//            if(Env.getIntance().get(id) == null)
+//            {
+//                ErrorLog.getInstance().add("Error: variable '"+id+"' no existe.");
+//            }
+//        }
         param.semanticValidation();
     }
     

@@ -12,7 +12,12 @@ public class String extends Type{
 
     @Override
     public java.lang.String toAssably() {
-        return "string";
+        return "String";
     }
+    @Override
+    public java.lang.String toStr() {
+        return "String";
+    }
+    
     
 }

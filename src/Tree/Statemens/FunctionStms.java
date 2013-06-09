@@ -8,6 +8,7 @@ import Semantic.Env;
 import Semantic.ErrorLog;
 import Tree.Expressions.Expression;
 import Tree.Expressions.Id;
+import Tree.Types.Function;
 import Tree.Types.Type;
 import java.util.ArrayList;
 
@@ -59,10 +60,11 @@ public class FunctionStms extends Statement{
     public void semanticValidation() {
         
         Type t = Env.getIntance().getType(this.name.getIdentifier());
+        Type t2 = new Function(null);
         
-        if(!(t instanceof Tree.Types.Function))
+        if(!(t.getClass() != t2.getClass()))
         {
-            ErrorLog.getInstance().add("Error: La variable '"+this.name.getIdentifier()+"' no es de tipo Function");
+            ErrorLog.getInstance().add("Error: El identificador '"+this.name.getIdentifier()+"' no es de tipo Function");
         }else
         {
             int paramSize = ((Tree.Types.Function)t).count();

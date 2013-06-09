@@ -10,7 +10,7 @@ import Tree.Types.Bool;
  *
  * @author SergioJavier
  */
-public class LitBool extends Expression {
+public class LitBool extends Literal {
     
     Boolean value;
 
@@ -25,11 +25,6 @@ public class LitBool extends Expression {
 
     public void setValue(Boolean value) {
         this.value = value;
-    }
-
-    @Override
-    public void semanticValidation() { 
-        
     }
    
 }

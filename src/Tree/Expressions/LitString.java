@@ -8,7 +8,7 @@ package Tree.Expressions;
  *
  * @author SergioJavier
  */
-public class LitString extends Expression {
+public class LitString extends Literal {
     
     String value;
 
@@ -23,11 +23,6 @@ public class LitString extends Expression {
 
     public void setValue(String value) {
         this.value = value;
-    }
-
-    @Override
-    public void semanticValidation() {
-        
     }
        
 }

@@ -41,4 +41,9 @@ public class Array extends Type{
         return "Array";
     }
 
+    @Override
+    public java.lang.String toStr() {
+        return "Array";
+    }
+
 }

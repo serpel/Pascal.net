@@ -4,6 +4,7 @@
  */
 package Tree.Types;
 
+import Tree.Declarations.Declarations;
 import Tree.Expressions.Expression;
 
 /**
@@ -12,23 +13,23 @@ import Tree.Expressions.Expression;
  */
 public class Function extends Type{
 
-    Expression exprs;
+    Declarations exprs;
 
-    public Function(Expression exprs) {
+    public Function(Declarations exprs) {
         this.exprs = exprs;
     }
 
-    public Expression getExprs() {
+    public Declarations getExprs() {
         return exprs;
     }
 
-    public void setExprs(Expression exprs) {
+    public void setExprs(Declarations exprs) {
         this.exprs = exprs;
     }
     
     public int count()
     {
-        Expression e = this.exprs;
+        Declarations e = this.exprs;
         
         int cont = 0;
         while(e!=null)
@@ -42,7 +43,12 @@ public class Function extends Type{
     
     @Override
     public java.lang.String toAssably() {
-        return "function";
+        return "Function";
+    }
+    
+    @Override
+    public java.lang.String toStr() {
+        return "Funtion";
     }
     
 }

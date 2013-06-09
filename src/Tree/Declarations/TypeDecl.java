@@ -37,5 +37,10 @@ public class TypeDecl extends Declarations{
     public void setT(Type t) {
         this.t = t;
     }
+
+    @Override
+    public void semanticValidation() {
+        //throw new UnsupportedOperationException("Not supported yet.");
+    }
     
 }

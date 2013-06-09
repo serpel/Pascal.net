@@ -13,7 +13,17 @@ import Semantic.Environment;
 public abstract class Statement { 
     Statement next=null;
     
-    public abstract void semanticValidation();  
+    public abstract void semanticValidation(); 
+    
+    public void semantic()
+    {
+        this.semanticValidation();
+        
+        if(next!=null)
+        {
+            next.semantic();
+        }
+    }
 
     public void setNext(Statement next) {
         this.next = next;

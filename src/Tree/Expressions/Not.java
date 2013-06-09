@@ -28,6 +28,9 @@ public class Not extends Expression{
 
     @Override
     public void semanticValidation() {
+        
+        expr.semantic();
+        
         if(!(expr.getType() instanceof Tree.Types.Bool))
         {
             ErrorLog.getInstance().add("Error: Negacion requiere Tipo "+this.expr.getType().toString()+".");

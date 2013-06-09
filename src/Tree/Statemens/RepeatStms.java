@@ -8,31 +8,32 @@ import Semantic.Env;
 import Semantic.ErrorLog;
 import Tree.Expressions.Expression;
 import Tree.Types.Bool;
+import Tree.Types.Type;
 
 /**
  *
  * @author SergioJavier
  */
 public class RepeatStms extends Statement{
-    Expression param;
+    Expression expr;
     Statement stms;
     
 
-    public RepeatStms(Expression param, Statement stms) {
-        this.param = param;
+    public RepeatStms(Expression expr, Statement stms) {
+        this.expr = expr;
         this.stms = stms;
     }
 
-    public Expression getParam() {
-        return param;
+    public Expression Expr() {
+        return expr;
     }
 
     public Statement getStms() {
         return stms;
     }
 
-    public void setParam(Expression param) {
-        this.param = param;
+    public void setExpr(Expression expr) {
+        this.expr = expr;
     }
 
     public void setStms(Statement stms) {
@@ -40,19 +41,21 @@ public class RepeatStms extends Statement{
     }
 
     @Override
-    public void semanticValidation() {
-        
-        Env.newEnv();     
-        
-        if(!(this.param.getType() instanceof Bool) || !(this.param.getType() instanceof Tree.Types.Integer))
+    public void semanticValidation() {  
+              
+        Type t = new Bool();
+        if(this.expr.getType().getClass() != t.getClass())
         {
-            ErrorLog.getInstance().add("Error: Instruccion While no soporta tipo "+this.param.getType().toString());
+            ErrorLog.getInstance().add("Error: While no soporta tipo "+this.expr.getType().toString());
         }    
         
-        stms.semanticValidation();
-            
-        Env.restoreEnv();
+        if (stms != null) {
+            Env.newEnv();
+            stms.semantic();
+            Env.restoreEnv();
+        }
         
+        this.expr.semantic();
     }
 
 }

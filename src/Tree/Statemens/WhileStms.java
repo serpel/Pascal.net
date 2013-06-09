@@ -13,43 +13,47 @@ import Tree.Types.*;
  * @author SergioJavier
  */
 public class WhileStms extends Statement{
-    Expression param;
+    Expression expr;
     Statement stms;
 
     public WhileStms(Expression param, Statement stms) {
-        this.param = param;
+        this.expr = param;
         this.stms = stms;
     }
 
-    public Expression getParam() {
-        return param;
+    public Expression getExpr() {
+        return expr;
     }
 
     public Statement getStms() {
         return stms;
     }
 
-    public void setParam(Expression param) {
-        this.param = param;
+    public void setExpr(Expression expr) {
+        this.expr = expr;
     }
 
     public void setStms(Statement stms) {
         this.stms = stms;
     }
-
+    
     @Override
     public void semanticValidation() {
+  
+        this.expr.semantic();
         
-        Env.newEnv();     
-        
-        if(!(this.param.getType() instanceof Bool) || !(this.param.getType() instanceof Tree.Types.Integer))
+        Type t = new Tree.Types.Bool();
+        if(this.expr.getType().getClass() != t.getClass())
         {
-            ErrorLog.getInstance().add("Error: Instruccion While no soporta tipo "+this.param.getType().toString());
-        }    
+            ErrorLog.getInstance().add("Error: While no soporta tipo "+this.expr.getType().toStr());
+        }
         
-        stms.semanticValidation();
-            
-        Env.restoreEnv();
+        if(this.stms != null)
+        {
+            Env.newEnv();
+            this.stms.semantic();
+            Env.restoreEnv();
+        }     
     }
     
 }

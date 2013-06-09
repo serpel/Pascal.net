@@ -8,7 +8,10 @@ import Semantic.Env;
 import Semantic.Environment;
 import Semantic.ErrorLog;
 import Tree.Expressions.Expression;
+import Tree.Expressions.Id;
 import Tree.Types.Bool;
+import Tree.Types.Type;
+import com.sun.corba.se.spi.ior.Identifiable;
 
 /**
  *
@@ -53,14 +56,28 @@ public class ForStms extends Statement{
     public void semanticValidation() {
         Env.newEnv();   
         
-        this.ass.semanticValidation();
-        
-        if(this.ass.getRight().getType() != this.expr.getType())
+        Expression i = this.ass.left;
+        Expression j = this.ass.right;
+        if(i instanceof Id)
         {
-             ErrorLog.getInstance().add("Error: El rango de la intruccion FOR debe poseer tipos iguales, se encontro: "+this.ass.right.getType().toString()+", "+this.expr.getType().toString());
+            Env.getIntance().put(((Id)i).getIdentifier(), j.getType()); 
+        }else
+        {
+             ErrorLog.getInstance().add("Error: For esperaba Id pero se encontro: "+i.getType().toStr());
+        }       
+
+        this.ass.semantic();
+        this.expr.semantic();
+        
+        if(this.ass.getRight().getType().getClass() != this.expr.getType().getClass())
+        {
+             ErrorLog.getInstance().add("Error: El rango de la intruccion FOR debe poseer tipos iguales, se encontro: "+this.ass.right.getType().toStr()+" y "+this.expr.getType().toStr());
         }
         
-        stms.semanticValidation();
+        if(stms!=null)
+        {
+            stms.semantic();
+        }
             
         Env.restoreEnv();
     }

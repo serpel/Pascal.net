@@ -33,4 +33,9 @@ public class Record extends Type{
         return "";
     }
     
+    @Override
+    public java.lang.String toStr() {
+        return "Record";
+    }
+    
 }

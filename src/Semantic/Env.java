@@ -53,14 +53,13 @@ public class Env {
         this.table.addVariable(id, t);
     }
     
-    public Expression get(String name)
+    public int getNumber(String name)
     {
-        Expression found = null;
+        int found = -1;
         for(Env e=this; e!=null; e=e.prev)
-        {
-            found = e.table.getValue(name);
-            
-            if(found != null)
+        {   
+            found = e.table.getNumber(name);           
+            if( found != -1)
             {
                 return found;
             }

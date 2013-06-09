@@ -4,7 +4,11 @@
  */
 package Tree.Declarations;
 
+import Semantic.Env;
 import Tree.Expressions.Expression;
+import Tree.Expressions.Id;
+import Tree.Types.Custom;
+import Tree.Types.Type;
 
 /**
  *
@@ -12,18 +16,35 @@ import Tree.Expressions.Expression;
  */
 public class IdDecl extends Declarations{
     
-    Expression ids;
+    String name;
+    Type t;
 
-    public IdDecl(Expression ids) {
-        this.ids = ids;
+    public IdDecl(String name, Type t) {
+        this.name = name;
+        this.t = t;
+        
+        Env.getIntance().put(name, t);
     }
 
-    public Expression getIds() {
-        return ids;
+    public String getName() {
+        return name;
     }
 
-    public void setIds(Expression ids) {
-        this.ids = ids;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Type getT() {
+        return t;
+    }
+
+    public void setT(Type t) {
+        this.t = t;
+    }
+
+    @Override
+    public void semanticValidation() {
+        
     }
     
 }

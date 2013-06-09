@@ -4,11 +4,13 @@
  */
 package Tree.Expressions;
 
+import Semantic.ErrorLog;
+
 /**
  *
  * @author SergioJavier
  */
-public class BinaryOp extends Expression{
+public abstract class BinaryOp extends Expression{
     
     Expression left, right;
 
@@ -32,14 +34,12 @@ public class BinaryOp extends Expression{
     public void setRight(Expression right) {
         this.right = right;
     }
+    
+    public abstract void semantic();
 
     @Override
     public void semanticValidation() {
-        
-        if(left.getType() != right.getType())
-        {
-            System.out.println("Tipos Incompatibles");
-        }
+        this.semantic();      
     }  
     
 }

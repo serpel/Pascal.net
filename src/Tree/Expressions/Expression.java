@@ -17,6 +17,16 @@ public abstract class Expression {
 
     public abstract void semanticValidation();  
     
+    public void semantic()
+    {
+        semanticValidation();
+        
+        if(next!=null)
+        {
+            semantic();
+        }
+    }
+    
     public Expression getNext() {
         return next;
     }

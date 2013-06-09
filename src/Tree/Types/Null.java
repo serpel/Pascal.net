@@ -12,7 +12,12 @@ public class Null extends Type{
     
     @Override
     public java.lang.String toAssably() {
-        return "int32";
+        return "Null";
+    }
+    
+    @Override
+    public java.lang.String toStr() {
+        return "Null";
     }
     
 }

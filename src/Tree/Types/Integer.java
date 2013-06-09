@@ -15,4 +15,9 @@ public class Integer extends Type{
         return "int32";
     }
     
+    @Override
+    public java.lang.String toStr() {
+        return "Int";
+    }
+    
 }

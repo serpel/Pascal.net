@@ -11,17 +11,17 @@ import Tree.Expressions.Expression;
  * @author SergioJavier
  */
 public class Case extends Statement {
-    
-    Expression exprs;
+
+    Expression elist;
     Statement stms;
 
-    public Case(Expression exprs, Statement stms) {
-        this.exprs = exprs;
+    public Case(Expression elist, Statement stms) {
+        this.elist = elist;
         this.stms = stms;
     }
 
-    public Expression getExprs() {
-        return exprs;
+    public Expression getEList() {
+        return elist;
     }
 
     public Statement getStms() {
@@ -29,7 +29,7 @@ public class Case extends Statement {
     }
 
     public void setExprs(Expression exprs) {
-        this.exprs = exprs;
+        this.elist = exprs;
     }
 
     public void setStms(Statement stms) {
@@ -38,6 +38,11 @@ public class Case extends Statement {
 
     @Override
     public void semanticValidation() {
-        this.stms.semanticValidation();
+        
+        this.elist.semantic();
+        
+        if (this.stms != null) {
+            this.stms.semantic();
+        }
     }
 }

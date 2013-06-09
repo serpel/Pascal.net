@@ -9,6 +9,7 @@
   by Gerwin Klein
 */
 
+import Semantic.ErrorLog;
 import Tree.Declarations.Declarations;
 import java.io.*;
    
@@ -18,6 +19,10 @@ public class Main {
     try {      
       parser p = new parser(new Lexer(new FileReader("src/raiz.pas")));
       Declarations result = (Declarations)p.parse().value;
+      
+      result.semantic();
+      
+      ErrorLog.getInstance().print();
       
       int value=1;
       //System.out.println(result);

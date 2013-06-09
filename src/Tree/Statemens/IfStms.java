@@ -8,6 +8,7 @@ import Semantic.Env;
 import Semantic.ErrorLog;
 import Tree.Expressions.Expression;
 import Tree.Types.Bool;
+import Tree.Types.Type;
 
 /**
  *
@@ -50,17 +51,27 @@ public class IfStms extends Statement{
     @Override
     public void semanticValidation() {
   
-        if(!(this.expr.getType() instanceof Bool) || !(this.expr.getType() instanceof Tree.Types.Integer))
+        this.expr.semantic();
+        
+        Type t = new Tree.Types.Bool();
+        if(this.expr.getType().getClass() != t.getClass())
         {
             ErrorLog.getInstance().add("Error: Instruccion If no soporta tipo "+this.expr.getType().toString());
-        }    
-        Env.newEnv();
-        this.ifst.semanticValidation();
-        Env.restoreEnv();
+        }
         
-        Env.newEnv();
-        this.elsest.semanticValidation();
-        Env.restoreEnv();
+        if(this.ifst != null)
+        {
+            Env.newEnv();
+            this.ifst.semantic();
+            Env.restoreEnv();
+        }     
+        
+        if(this.elsest != null)
+        {
+            Env.newEnv();
+            this.elsest.semantic();
+            Env.restoreEnv();
+        }       
         
     }
     

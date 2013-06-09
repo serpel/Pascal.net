@@ -4,6 +4,7 @@
  */
 package Tree.Declarations;
 
+import Semantic.Env;
 import Tree.Expressions.*;
 
 /**
@@ -19,4 +20,10 @@ public class ConstDecl extends Declarations{
         this.name = name;
         this.expr = expr;
     } 
+
+    @Override
+    public void semanticValidation() {
+        //throw new UnsupportedOperationException("Not supported yet.");
+        //Env.getIntance().put(name.getIdentifier(), null);
+    }
 }

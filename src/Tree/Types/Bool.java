@@ -15,4 +15,9 @@ public class Bool extends Type{
         return "Bool";
     }
     
+    @Override
+    public java.lang.String toStr() {
+        return "Bool";
+    }
+    
 }

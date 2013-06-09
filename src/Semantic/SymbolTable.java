@@ -45,7 +45,7 @@ public class SymbolTable {
         return null;
     }
     
-    public int geNumber(String name)
+    public int getNumber(String name)
     {
         if(table.containsKey(name))
         {
@@ -55,17 +55,8 @@ public class SymbolTable {
     }
     
     public Type getType(String name)
-    {
-        Type t;
-        if(typeTable.contains(name))
-        {
-            t = typeTable.get(name);
-        }else
-        {
-            t = new Null();
-        }
-        
-        return t;
+    {       
+        return typeTable.get(name);
     }
     
      public String getLocals()

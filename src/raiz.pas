@@ -4,19 +4,53 @@ program raiz(input, output);
  var 
     x, y: float;
     respuesta: string;
+    size: int;
  
  begin
    writeln('** Calcular la raíz cuadrada de 12 **');
    writeln('Entrar x (> 0): ');
-   readln(x);
-   y := sqrt(abs(x)); (* Raíz cuadrada del valor absoluto de x para evitar raíces imaginarias *)
-   if (x<0) then (* Si x es negativo, el resultado se notifica como imaginario *)
+   readln(respuesta);
+   writeln('Fin');
+
+   size := 1;
+
+   respuesta := 'hola mundo' + respuesta;
+   writeln(respuesta);
+
+
+   if (size > 1) then 
    begin
-      writeln('La raíz cuadrada de '+ x +' es el número imaginario '+ y +'i');
+       size := size + 1;
+       size := 1;
    end
    else
    begin
-      writeln('La raíz cuadrada de ' + x + ' es '+y);
+       size := (1 + 4) * 5;
    end
-   writeln('Fin');
+
+   while(size > 1) do
+   begin
+        size := 1;
+   end
+
+   for i:=1 to 10 do
+   begin
+        i := i + 1;
+   end
+ 
+   case respuesta of
+         'a': begin 
+                  size := 1; 
+              end
+         'b': begin
+                  x := y + x + 1.1;
+                  size := 2;
+                  x := 1.1;
+              end
+         else begin
+                  x := 1.1;
+              end
+             
+   end
+
  end.

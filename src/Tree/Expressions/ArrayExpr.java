@@ -25,10 +25,24 @@ public class ArrayExpr extends Expression{
     public void setIndexs(Expression indexs) {
         this.indexs = indexs;
     }  
+    
+    public int count()
+    {
+        Expression e = this.indexs;
+        
+        int cont = 0;
+        while(e!=null)
+        {
+            cont++;
+            e = e.getNext();
+        }
+        
+        return cont;     
+    }
 
     @Override
     public void semanticValidation() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
     
 }

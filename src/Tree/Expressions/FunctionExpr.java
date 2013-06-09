@@ -38,6 +38,6 @@ public class FunctionExpr extends Expression {
 
     @Override
     public void semanticValidation() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
 }

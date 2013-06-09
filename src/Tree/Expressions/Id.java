@@ -4,27 +4,54 @@
  */
 package Tree.Expressions;
 
+import Semantic.Env;
+import Semantic.ErrorLog;
+import Tree.Types.Null;
+import Tree.Types.Type;
+
 /**
  *
  * @author SergioJavier
  */
 public class Id extends Expression {
-    String Identifier;
+    String identifier;
+    Expression right;
 
     public Id(String Identifier) {
-        this.Identifier = Identifier;
+        this.identifier = Identifier;
     }
 
     public String getIdentifier() {
-        return Identifier;
+        return identifier;
+    }
+
+    public Expression getRight() {
+        return right;
+    }
+
+    public void setRight(Expression right) {
+        this.right = right;
     }
 
     public void setIdentifier(String Identifier) {
-        this.Identifier = Identifier;
+        this.identifier = Identifier;
     }
 
     @Override
     public void semanticValidation() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
+        //validacion de identificadores
+        Type t = Env.getIntance().getType(identifier);
+        super.setType(t);
+        
+        if (t == null) {
+            ErrorLog.getInstance().add("Error: Variable '" + this.identifier + "' no existe.");
+        } 
+        
+        if(this.right != null)
+        {   
+            this.right.semantic();
+            //if(this.right instanceof Array)
+        }
     }
 }

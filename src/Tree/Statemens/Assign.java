@@ -6,6 +6,7 @@ package Tree.Statemens;
 
 import Semantic.ErrorLog;
 import Tree.Expressions.Expression;
+import Tree.Expressions.Id;
 
 /**
  *
@@ -39,10 +40,18 @@ public class Assign extends Statement{
     @Override
     public void semanticValidation() {
         
-        if(this.left.getType() != this.right.getType())
+        left.semantic();
+        right.semantic();
+        
+        if(this.left instanceof Id)
         {
-             ErrorLog.getInstance().add("Error: Tipos incompatibles, se encontro: "+this.right.getType().toString()+", "+this.right.getType().toString());
-        }
+             if(this.left.getType().getClass() != this.right.getType().getClass())
+             {
+                ErrorLog.getInstance().add("Error: Asignacion con tipos incompatibles, "+this.left.getType().toStr()+" y "+this.right.getType().toStr());
+             }
+        }//else if(this.left instanceof Array)
+        
+       
     }
     
 }

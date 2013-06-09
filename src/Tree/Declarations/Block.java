@@ -35,5 +35,19 @@ public class Block extends Declarations{
     public void setStms(Statement stms) {
         this.stms = stms;
     } 
+
+    @Override
+    public void semanticValidation() {
+        
+        for(Declarations d:decls)
+        {
+            d.semantic();
+        }
+        
+        if(stms != null)
+        {
+            this.stms.semantic();
+        }
+    }
     
 }

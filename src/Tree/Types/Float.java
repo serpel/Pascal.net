@@ -15,4 +15,9 @@ public class Float extends Type{
         return "Float32";
     }
     
+    @Override
+    public java.lang.String toStr() {
+        return "Float";
+    }
+    
 }

@@ -15,4 +15,9 @@ public class Char extends Type{
         return "Char";
     }
     
+    @Override
+    public java.lang.String toStr() {
+        return "Char";
+    }
+    
 }
