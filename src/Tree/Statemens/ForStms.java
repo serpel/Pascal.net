@@ -54,7 +54,7 @@ public class ForStms extends Statement{
 
     @Override
     public void semanticValidation() {
-        Env.newEnv();   
+        Env.newEnv();  
         
         Expression i = this.ass.left;
         Expression j = this.ass.right;

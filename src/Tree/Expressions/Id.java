@@ -6,7 +6,9 @@ package Tree.Expressions;
 
 import Semantic.Env;
 import Semantic.ErrorLog;
+import Tree.Types.Array;
 import Tree.Types.Null;
+import Tree.Types.Record;
 import Tree.Types.Type;
 
 /**
@@ -39,19 +41,63 @@ public class Id extends Expression {
 
     @Override
     public void semanticValidation() {
-        
+
         //validacion de identificadores
         Type t = Env.getIntance().getType(identifier);
-        super.setType(t);
-        
+
         if (t == null) {
             ErrorLog.getInstance().add("Error: Variable '" + this.identifier + "' no existe.");
-        } 
-        
-        if(this.right != null)
-        {   
-            this.right.semantic();
-            //if(this.right instanceof Array)
+            
+            // Warning fix temporal
+            super.setType(new Null());
+        } else {
+            
+            super.setType(t);
+            Expression e = this.right;
+            String _id = this.identifier;
+            
+            while (e != null) {
+                if (e instanceof ArrayExpr) {
+                    ArrayExpr ae = (ArrayExpr) e;
+                    Array _t = (Array) Env.getIntance().getType(_id);
+                    if (ae.count() != _t.count()) {
+                        ErrorLog.getInstance().add("Error: Arreglo '" + this.identifier + "' esperaba " + _t.count() + " parametos.");
+                    }
+
+                    //seteo el tipo integer
+                    super.setType(_t.getT());
+                } else if (e instanceof FieldAccess) {
+                    FieldAccess f = (FieldAccess) e;
+                    
+                    Type _tmp = Env.getIntance().getType(_id);
+                    
+                    if (_tmp instanceof Record) {
+                        Record r = (Record) Env.getIntance().getType(_id);
+
+                        Type _t = r.getTable().get(f.getAtribute().getIdentifier());
+
+                        if (_t == null) {
+                            ErrorLog.getInstance().add("Error: Atributo '" + f.getAtribute().getIdentifier() + "' no encontrado en registro '" + _id + "'");
+                        } else {
+                            super.setType(_t);
+                        }
+                        //actualizo el id para la siguiente validacion
+                        _id = f.getAtribute().getIdentifier();
+                    } else if (_tmp instanceof Array) {
+                        Array a = (Array) Env.getIntance().getType(_id);
+                        Record r = (Record) Env.getIntance().getType(a.getT().toStr());
+
+                        Type _t = r.getTable().get(f.getAtribute().getIdentifier());
+
+                        if (_t == null) {
+                            ErrorLog.getInstance().add("Error: Atributo '" + f.getAtribute().getIdentifier() + "' no encontrado en registro '" + _id + "'");
+                        } else {
+                            super.setType(_t);
+                        }
+                    }
+                }
+                e = e.getNext();
+            }
         }
     }
 }

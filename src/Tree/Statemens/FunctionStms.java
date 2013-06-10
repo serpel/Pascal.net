@@ -60,19 +60,22 @@ public class FunctionStms extends Statement{
     public void semanticValidation() {
         
         Type t = Env.getIntance().getType(this.name.getIdentifier());
-        Type t2 = new Function(null);
+        Type t2 = new Function(null,null);
         
         if(!(t.getClass() != t2.getClass()))
         {
-            ErrorLog.getInstance().add("Error: El identificador '"+this.name.getIdentifier()+"' no es de tipo Function");
+            ErrorLog.getInstance().add("Error: El identificador '"+this.name.getIdentifier()+"' no es una Function");
         }else
         {
-            int paramSize = ((Tree.Types.Function)t).count();
+            int paramSize = ((Tree.Types.Function)t).getF().size();
             
+            //verifica cantidad de parametros
             if(paramSize != count())
             {
                 ErrorLog.getInstance().add("Error: La function '"+this.name.getIdentifier()+"' esperaba "+paramSize+" parametros.");
             } 
+            
+            //verifica orden parametros
         }
     }
     

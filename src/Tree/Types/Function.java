@@ -4,51 +4,44 @@
  */
 package Tree.Types;
 
-import Tree.Declarations.Declarations;
-import Tree.Expressions.Expression;
-
 /**
  *
  * @author SergioJavier
  */
 public class Function extends Type{
 
-    Declarations exprs;
+    Field f;
+    Type t;
 
-    public Function(Declarations exprs) {
-        this.exprs = exprs;
+    public Function(Field f, Type t) {
+        this.f = f;
+        this.t = t;
     }
 
-    public Declarations getExprs() {
-        return exprs;
+    public Field getF() {
+        return f;
     }
 
-    public void setExprs(Declarations exprs) {
-        this.exprs = exprs;
+    public void setF(Field f) {
+        this.f = f;
     }
-    
-    public int count()
-    {
-        Declarations e = this.exprs;
-        
-        int cont = 0;
-        while(e!=null)
-        {
-            cont++;
-            e = e.getNext();
-        }
-        
-        return cont;
+
+    public Type getT() {
+        return t;
+    }
+
+    public void setT(Type t) {
+        this.t = t;
     }
     
     @Override
     public java.lang.String toAssably() {
-        return "Function";
+        return t.toStr();
     }
     
     @Override
     public java.lang.String toStr() {
-        return "Funtion";
+        return t.toStr();
     }
     
 }

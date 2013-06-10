@@ -132,7 +132,7 @@ StringCharacter = [^\r\n\'\\]
     {integer}          { return symbol(sym.INT_LITERAL, new Integer(yytext())); }
     {float}            { return symbol(sym.FLOAT_LITERAL, new Float(yytext())); }
     {char}             { return symbol(sym.CHAR_LITERAL, new Character(yytext().charAt(1))); }
-    {bool}             { return symbol(sym.BOOLEAN_LITERAL, new Character(yytext().charAt(1))); }
+    {bool}             { return symbol(sym.BOOLEAN_LITERAL, new Boolean(yytext())); }
 
     /* comments */
     {Comment}          { /* ignore */ }

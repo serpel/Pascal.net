@@ -4,6 +4,8 @@
  */
 package AssemblyInfo;
 
+import java.util.Hashtable;
+
 /**
  *
  * @author SergioJavier
@@ -12,9 +14,11 @@ public class Assambly {
     
     String name,version;
     String header, body, footer;  
-
-    public Assambly(String name, String version) {
-        
+    
+    static Assambly instance = null;
+    Hashtable<String, Integer> label = new java.util.Hashtable<>();
+    
+    private Assambly() {
         if(name.isEmpty())
         {
             name = "test";
@@ -23,9 +27,42 @@ public class Assambly {
         {
             version = "1:0:1:0";
         }
-        this.version = version;
-        this.name = name;
+        this.hederInfo();
+    }
+
+    public static Assambly getInstance() {
         
+        if (instance == null)
+        {
+            instance = new Assambly();
+        }
+        return instance;
+    }  
+    
+    public void setInfo(String name, String version)
+    {
+        this.name = name;
+        this.version = version;
+        hederInfo();
+    }
+    
+    public String getLabel(String name)
+    {
+        String tmp;
+        if(!label.containsKey(name))
+        {
+            label.put(name,0);
+        }        
+        
+        tmp = name+label.get(name);        
+        label.put(name, label.get(name)+1);
+          
+        return tmp;
+        
+    }
+    
+    private void hederInfo()
+    {   
         StringBuilder head = new StringBuilder("\n"); 
         
         //assamblies

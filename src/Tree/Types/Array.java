@@ -35,6 +35,20 @@ public class Array extends Type{
     public void setT(Type t) {
         this.t = t;
     }
+    
+    public int count()
+    {
+        Expression e = this.exprs;
+        
+        int cont = 0;
+        while(e!=null)
+        {
+            cont++;
+            e = e.getNext();
+        }
+        
+        return cont;     
+    }
 
     @Override
     public java.lang.String toAssably() {

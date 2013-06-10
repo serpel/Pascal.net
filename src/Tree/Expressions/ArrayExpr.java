@@ -42,7 +42,8 @@ public class ArrayExpr extends Expression{
 
     @Override
     public void semanticValidation() {
-        //throw new UnsupportedOperationException("Not supported yet.");
+        //throw new UnsupportedOperationException("Not supported yet
+        //TO DO:
     }
     
 }

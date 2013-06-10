@@ -4,8 +4,11 @@
  */
 package Tree.Declarations;
 
+import Semantic.Env;
 import Tree.Expressions.Expression;
-import Tree.Statemens.Assign;
+import Tree.Expressions.Id;
+import Tree.Types.Custom;
+import Tree.Types.Record;
 import Tree.Types.Type;
 
 /**
@@ -14,33 +17,49 @@ import Tree.Types.Type;
  */
 public class TypeDecl extends Declarations{
     
-    Expression ids;
+    Id id;
     Type t;
 
-    public TypeDecl(Expression ids, Type t) {
-        this.ids = ids;
+    public TypeDecl(Id id, Type t) {
+        this.id = id;
         this.t = t;
     }
 
-    public Expression getIds() {
-        return ids;
+    public Expression getId() {
+        return id;
     }
 
     public Type getT() {
         return t;
     }
 
-    public void setIds(Expression ids) {
-        this.ids = ids;
+    public void setIds(Id id) {
+        this.id = id;
     }
 
     public void setT(Type t) {
         this.t = t;
     }
+    
+    public Id find(String id)
+    {
+        if(this.id.getIdentifier().equals(id))
+        {
+            return this.id;
+        }
+        
+        return null;
+    }
 
     @Override
     public void semanticValidation() {
-        //throw new UnsupportedOperationException("Not supported yet.");
+        //id.setType(t);
+        
+        if(t instanceof Record )
+        {
+            
+        }
+        Env.getIntance().put(id.getIdentifier(), t);
     }
     
 }

@@ -38,17 +38,40 @@ public class VarDecl extends Declarations{
     public void setT(Type t) {
         this.t = t;
     }
+    
+    public Id find(String id)
+    {
+        Expression e = ids;
+        while (e != null) {
+            Id i = (Id) e;
+
+            if(i.getIdentifier().contains(id))
+            {
+                return i;
+            }
+
+            e = e.getNext();
+        }
+        
+        return null;
+    }
 
     @Override
     public void semanticValidation() {
         
         Expression e=ids;
-        while(e!=null)
-        {
-            Id i = (Id)e;
+        while (e != null) {
+            Id i = (Id) e;
+
+            //parte obscura
+            Type _t = new Custom();
+            if (_t.getClass() == t.getClass()) {
+                t = Env.getIntance().getType(((Custom)t).getId());
+            }
+
             Env.getIntance().put(i.getIdentifier(), t);
-            
-            e=e.getNext();
+
+            e = e.getNext();
         }
     }
     

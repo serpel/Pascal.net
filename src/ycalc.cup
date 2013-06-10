@@ -3,8 +3,14 @@ import java.util.ArrayList;
 import Tree.Declarations.*;
 import Tree.Statemens.*;
 import Tree.Expressions.*;
+
 import Tree.Types.Custom;
 import Tree.Types.Type;
+import Tree.Types.Field;
+import Tree.Types.Function;
+
+import java.util.Hashtable;
+import Semantic.Env;
 
 parser code {:
 
@@ -79,9 +85,6 @@ non terminal Declarations type_body;
 non terminal Declarations var_decl;
 non terminal Declarations decl_param;
 non terminal Declarations decl_list;
-non terminal Declarations params;
-non terminal Declarations parameter;
-non terminal Declarations param;
 
 non terminal Expression expr;
 non terminal Expression expr_list;
@@ -102,6 +105,10 @@ non terminal Statement else;
 non terminal Statement case_list;
 non terminal Statement case;
 
+non terminal Hashtable<String, Type> record_body;
+non terminal Field params;
+non terminal Field parameter;
+
 non terminal Type type;
 
 /* BEGIN */
@@ -109,7 +116,6 @@ non terminal Type type;
 program   ::= PROGRAM ID:i parameter:p SEMICOLON block:b DOT
               {: RESULT=new Program(new Id(i),p,b); :}
               |
-              {: RESULT=null; :}
               ;
                        
 block     ::= decl_seq:d compound:c
@@ -183,8 +189,8 @@ functions ::= function:f functions:fs
               |
               ;
 
-function  ::= FUNCTION ID:i parameter:p COLON type:t SEMICOLON compound:c SEMICOLON
-              {: RESULT=new FunctionDecl(new Id(i),new Tree.Types.Function(p),c); :}
+function  ::= FUNCTION ID:i parameter:p COLON type:t SEMICOLON var_decl:v compound:c SEMICOLON
+              {: RESULT=new FunctionDecl(new Id(i),new Function(p, t),v,c);  :}
               ;
       
 type_body ::= ID:i EQUAL type:t SEMICOLON
@@ -194,27 +200,20 @@ type_body ::= ID:i EQUAL type:t SEMICOLON
 parameter ::= LPAR params:p RPAR
               {: RESULT=p; :}
               |
-              {: RESULT=null; :}
               ;
 
-params    ::= param:p SEMICOLON params:prs
+params    ::= ID:i COLON type:t SEMICOLON params:p
               {:
-                p.setNext(prs);
-                RESULT=p; 
+                p.put(i,t);
+                RESULT = p;
               :}
-              |
-              param:p
-              {: RESULT=p; :}  
-              ; 
-
-param     ::= REF VAR ids:i COLON type:t
-              {: RESULT=new RefVar(i,t); :}
-              |
-              VAR ids:i COLON type:t
-              {: RESULT=new VarDecl(i,t); :}
-              |
-              ids:i
-              {: RESULT=new IdDecl("test",new Custom()); :}
+              | 
+              ID:i COLON type:t
+              {:        
+                Field prs = new Field();
+                prs.put(i,t);
+                RESULT = prs;
+              :} 
               |
               ;
 
@@ -268,8 +267,8 @@ statement ::= function_stms:f SEMICOLON
               WRITELN LPAR expr:e RPAR SEMICOLON 
               {: RESULT=new Write(e); :}
               |
-              READLN LPAR ID:i RPAR SEMICOLON
-              {: RESULT=new Read(new Id(i)); :}
+              READLN LPAR variable:i RPAR SEMICOLON
+              {: RESULT=new Read(i); :}
               ;
 
 else      ::= ELSE compound:c
@@ -425,7 +424,7 @@ expr_list     ::= expr:e SEMI expr_list:l
 type          ::= ARRAY LBRACKET expr_list:l RBRACKET OF type:t
               {: RESULT=new Tree.Types.Array(l,t); :}    
               |
-              RECORD decl_list:l END
+              RECORD record_body:l END
               {: RESULT=new Tree.Types.Record(l); :}    
               |
               STRING
@@ -443,8 +442,9 @@ type          ::= ARRAY LBRACKET expr_list:l RBRACKET OF type:t
               BOOL
               {: RESULT=new Tree.Types.Bool(); :}    
               |
-              ID
-              {: RESULT=new Tree.Types.Custom(); :}    
+              ID:i
+              {:
+                RESULT=new Custom(i); :}    
               |
               VOID 
               {: RESULT=new Tree.Types.Void(); :}    
@@ -461,4 +461,18 @@ decl_list     ::=
                 RESULT=p;
               :}    
               |   
+              ;
+ 
+
+record_body  ::= 
+              ID:i COLON type:t SEMICOLON record_body:r
+              {: 
+                if(r == null)
+                {   
+                   r = new Hashtable<>(); 
+                }
+                r.put(i, t);
+                RESULT=r;
+              :}    
+              | 
               ;

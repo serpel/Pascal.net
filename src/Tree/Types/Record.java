@@ -4,9 +4,15 @@
  */
 package Tree.Types;
 
+import Semantic.Env;
 import Tree.Statemens.Statement;
 import Tree.Declarations.Declarations;
+import Tree.Declarations.TypeDecl;
+import Tree.Declarations.VarDecl;
+import Tree.Expressions.Expression;
+import Tree.Expressions.Id;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  *
@@ -14,20 +20,20 @@ import java.util.ArrayList;
  */
 public class Record extends Type{
     
-    Declarations decls;
+    Hashtable<java.lang.String, Type> table;
 
-    public Record(Declarations decls) {
-        this.decls = decls;
+    public Record(Hashtable<java.lang.String, Type> table) {
+        this.table = table;
     }
 
-    public Declarations getDecls() {
-        return decls;
+    public Hashtable<java.lang.String, Type> getTable() {
+        return table;
     }
 
-    public void setDecls(Declarations decls) {
-        this.decls = decls;
-    }   
-
+    public void setTable(Hashtable<java.lang.String, Type> table) {
+        this.table = table;
+    }
+        
     @Override
     public java.lang.String toAssably() {
         return "";
