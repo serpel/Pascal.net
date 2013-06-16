@@ -55,20 +55,15 @@ public class RepeatStms extends Statement{
         {
             ErrorLog.getInstance().add("Error: While no soporta tipo "+this.expr.getType().toString());
         }  
-        
-       
     }
 
     @Override
     public String codeGenerationStament() {
         java.lang.String etiqueta1 = Assambly.getInstance().getLabel("repeat");
-        java.lang.String codeRepeat = "";
 
-        if (this.stms != null) {
-            codeRepeat = this.codeGeneration();
-        }
+        java.lang.String codeRepeat = stms != null ? stms.codeGeneration() : "";
 
-        return etiqueta1 + ":\n" + codeRepeat + this.expr.codeGeneration() + "brtrue.s " + etiqueta1 + "\n";
+        return etiqueta1 + ":\n" + codeRepeat + this.expr.codeGeneration() + "brtrue " + etiqueta1 + "\n";
 
     }
 

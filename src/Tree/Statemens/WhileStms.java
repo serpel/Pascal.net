@@ -60,13 +60,9 @@ public class WhileStms extends Statement{
         java.lang.String etiqueta1 = Assambly.getInstance().getLabel("Condicion");
         java.lang.String etiqueta2 = Assambly.getInstance().getLabel("While");
 
-        java.lang.String codeWhile = "";
+        java.lang.String codeWhile = stms != null ? stms.codeGeneration() : "";
 
-        if (this.stms != null) {
-            codeWhile = this.stms.codeGeneration();
-        }
-
-        return "br.s " + etiqueta1 + "\n" + etiqueta2 + ":\n" + codeWhile + etiqueta1 + ":\n" + this.expr.codeGeneration() + "brtrue.s " + etiqueta2+"\n";
+        return "br " + etiqueta1 + "\n" + etiqueta2 + ":\n" + codeWhile + etiqueta1 + ":\n" + this.expr.codeGeneration() + "brtrue " + etiqueta2+"\n";
         //return etiqueta1+":\n"+this.expr.codeGeneration()+"brzero "+etiqueta2+"\n"+codeWhile+"br "+etiqueta1+"\n"+etiqueta2+":\n";  
     }
     

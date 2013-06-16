@@ -7,10 +7,11 @@ program raiz();
  begin
    x := 1;
 
-   if ((x = 1) or (x > 1)) then
-   begin
-        x := x + 3 * 4;
+   repeat 
+   begin 
+        x := x + 1; 
    end
+   until x > 1 ; 
 
    writeln(x);
 
