@@ -2,17 +2,13 @@ program raiz();
  (*Obtener la raíz cuadrada de un número real x cualquiera.*)
  
  var 
-    x: int;
+    i: int;
  
  begin
-   x := 1;
 
-   repeat 
-   begin 
-        x := x + 1; 
+   for i := 0 to 10 do
+   begin
+    writeln(i);
    end
-   until x > 1 ; 
-
-   writeln(x);
 
  end.

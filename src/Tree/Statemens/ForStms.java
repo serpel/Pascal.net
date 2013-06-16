@@ -9,6 +9,10 @@ import Semantic.Env;
 import Semantic.ErrorLog;
 import Tree.Expressions.Expression;
 import Tree.Expressions.Id;
+import Tree.Expressions.L;
+import Tree.Expressions.LitInteger;
+import Tree.Expressions.Sum;
+import Tree.Types.Type;
 
 /**
  *
@@ -51,51 +55,38 @@ public class ForStms extends Statement{
 
     @Override
     public void semanticValidation() {
-       
-        //Env.newEnv();  
-         
-        Id i = this.ass.i;
-        Expression j = this.ass.right;
-        if(i instanceof Id)
-        {
-            Env.getIntance().put(i.getIdentifier(), j.getType()); 
-        }else
-        {
-             ErrorLog.getInstance().add("Error: For esperaba Id pero se encontro: "+i.getType().toStr());
-        }       
 
         this.ass.semantic();
         this.expr.semantic();
-        
-        if(this.ass.getRight().getType().getClass() != this.expr.getType().getClass())
-        {
-             ErrorLog.getInstance().add("Error: El rango de la intruccion FOR debe poseer tipos iguales, se encontro: "+this.ass.right.getType().toStr()+" y "+this.expr.getType().toStr());
+
+        Type t = new Tree.Types.Integer();
+        if (this.expr.getType().getClass() != t.getClass()) {
+            ErrorLog.getInstance().add("Error: Expresion de la sentecia for esperaba tipo entero, se encontro: " + this.expr.getType().toStr());
+        } else {
+            if (this.ass.getRight().getType().getClass() != this.expr.getType().getClass()) {
+                ErrorLog.getInstance().add("Error: El rango de la intruccion FOR debe poseer tipos Entero, se encontro: " + this.ass.right.getType().toStr() + " y " + this.expr.getType().toStr());
+            }
         }
-        
-        if(stms != null)
-        {
+
+        if (stms != null) {
             stms.semantic();
         }
-            
         //Env.restoreEnv();
     }
 
     @Override
     public String codeGenerationStament() {
-        String etiqueta1 = Assambly.getInstance().getLabel("For");
-        String etiqueta2 = Assambly.getInstance().getLabel("EndFor");
+        String etiqueta1 = Assambly.getInstance().getLabel("Condicion");
+        String etiqueta2 = Assambly.getInstance().getLabel("For");
         
-        String asignacion, condicion, incrementar;
-        int n = Env.getIntance().getNumber(ass.i.getIdentifier());     
+        // FOR ID:i ASSIGN expr:r TO expr:e DO compound:c
+        Expression e = new L(ass.i,expr);
         
-        asignacion = this.ass.getRight().codeGeneration()+"ldloc."+ n+ "\n"+"stloc."+n+ "\n";;
+        //incrementador
+        Assign a = new Assign(ass.i, new Sum(ass.i, new LitInteger(1)));
         
-        condicion = etiqueta1+":\n"+"ldloc."+n+"\n"+this.expr.codeGeneration()+"bgt "+etiqueta2+"\n";
-        
-        incrementar = "ldloc."+n+"\nldc.i4 1\nadd\n"+"stloc."+n+"\nbr "+etiqueta1;
-        
-        return asignacion+condicion+this.stms.codeGeneration()+incrementar+"\n"+etiqueta2+":\n";
-    
+        return ass.codeGeneration()+"br "+etiqueta1+"\n"+etiqueta2+":\n"+stms.codeGeneration()+a.codeGeneration()+etiqueta1+":\n"+e.codeGeneration()+"brtrue "+etiqueta2+"\n";
+   
     }
     
 }

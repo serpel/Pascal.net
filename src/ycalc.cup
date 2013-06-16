@@ -76,7 +76,7 @@ non terminal Declarations block;
 non terminal ArrayList<Declarations> decl_seq;
 non terminal Declarations functions;
 non terminal Declarations function;
-non terminal Declarations constant;
+//non terminal Declarations constant;
 non terminal Declarations const_list;
 non terminal Declarations const_decl;
 non terminal Declarations type_list;
@@ -113,24 +113,15 @@ non terminal Type type;
 
 /* BEGIN */
 
-program   ::= PROGRAM ID:i parameter:p SEMICOLON block:b DOT
-              {: RESULT=new Program(new Id(i),p,b); :}
+program   ::= PROGRAM ID:i parameter:p SEMICOLON decl_seq:d compound:c DOT
+              {: RESULT=new Program(new Id(i),p,d,c); :}
               |
               ;
-                       
-block     ::= decl_seq:d compound:c
-              {: 
-                RESULT=new Block(d,c); 
-              :}
-              ;
 
-decl_seq  ::= constant:c type_decl:t var_decl:v functions:f   
+decl_seq  ::= type_decl:t var_decl:v functions:f   
               {: 
                 ArrayList<Declarations> d = new ArrayList<>();
                 
-                if(c!=null){
-                    d.add(c);
-                }
                 if(t!=null){
                     d.add(t);
                 }
@@ -146,10 +137,10 @@ decl_seq  ::= constant:c type_decl:t var_decl:v functions:f
               ;
 
 //--------DECLARATIONS--------------------
-constant  ::= CONST const_list:l
-              {: RESULT=l; :}
-              | 
-              ;
+//constant  ::= CONST const_list:l
+//              {: RESULT=l; :}
+//              | 
+//              ;
 
 type_decl ::= TYPE type_list:t
               {: RESULT=t; :}

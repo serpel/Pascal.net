@@ -6,8 +6,10 @@ package Tree.Declarations;
 
 import Semantic.Env;
 import Tree.Expressions.Id;
+import Tree.Statemens.Statement;
 import Tree.Types.Field;
 import Tree.Types.Type;
+import java.util.ArrayList;
 /**
  *
  * @author SergioJavier
@@ -15,66 +17,61 @@ import Tree.Types.Type;
 public class Program extends Declarations{
     Id name;
     Field f;
-    Declarations block;
-    public String tmp;
+    ArrayList<Declarations> decls;
+    Statement stms;
 
-    public Program(Id name, Field f, Declarations block) {
+    public Program(Id name, Field f, ArrayList<Declarations> decl, Statement stms) {
         this.name = name;
         this.f = f;
-        this.block = block;
+        this.decls = decl;
+        this.stms = stms;
     }
-
-    public Id getName() {
-        return name;
-    }
-
-    public void setName(Id name) {
-        this.name = name;
-    }
-
-    public Field getF() {
-        return f;
-    }
-
-    public void setF(Field f) {
-        this.f = f;
-    }
-
-    public Declarations getBlock() {
-        return block;
-    }
-
-    public void setBlock(Declarations block) {      
-        this.block = block;
-    }
-
+    
     @Override
     public void semanticValidation() {
-
-        //codigo dentro de la funcion
-        //Env.newEnv();
         
+        //nombre de la funcion
         if (f != null) {
             for (String i : f.getIds()) {
                 Type t = f.get(i);
                 Env.getIntance().put(i, t);
             }
         }
-        
-        if(this.block != null)
-        {
-            this.block.semantic();
+
+        //declaraciones typos, variables
+        for (Declarations d : decls) {
+            d.semantic();
         }
-        //generacion
-        
-        //tmp = this.codeGenerationStament();
-        
-       // Env.restoreEnv();
+
+        //compound
+        if (stms != null) {
+            this.stms.semantic();
+        }
     }
 
     @Override
     public String codeGenerationStament() {
-        return this.block.codeGeneration();
+        
+        String main = "", funcion = "";
+
+        main += ".method static void  Main() cil managed {\n";
+
+        for (Declarations d : decls) {
+
+            if (d instanceof FunctionDecl) {
+                funcion += d.codeGeneration();
+            } else {
+                main += d.codeGeneration();
+            }
+        }
+
+        if (stms != null) {
+            main += this.stms.codeGeneration();
+        }
+
+        main += "}\n";
+
+        return funcion + main;
     }
     
 }

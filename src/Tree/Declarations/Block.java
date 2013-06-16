@@ -52,19 +52,28 @@ public class Block extends Declarations{
 
     @Override
     public String codeGenerationStament() {
-        String tmp = "";
+        String tmp = "", funcion = "";
+
+        tmp += ".method static void  Main() cil managed {\n";
         
-        for(Declarations d:decls)
-        {
-            tmp += d.codeGeneration();
+        for (Declarations d : decls) {
+            
+            if(d instanceof FunctionDecl)
+            {
+                funcion += d.codeGeneration();
+            }else
+            {
+                tmp += d.codeGeneration();
+            }  
         }
-        
-        if(stms != null)
-        {
+
+        if (stms != null) {
             tmp += this.stms.codeGeneration();
         }
         
-        return tmp;
+        tmp +="}\n";
+
+        return funcion+tmp;
     }
     
 }
