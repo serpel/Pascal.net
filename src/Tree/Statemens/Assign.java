@@ -4,6 +4,7 @@
  */
 package Tree.Statemens;
 
+import Semantic.Env;
 import Semantic.ErrorLog;
 import Tree.Expressions.Expression;
 import Tree.Expressions.Id;
@@ -14,44 +15,46 @@ import Tree.Expressions.Id;
  */
 public class Assign extends Statement{
 
-    Expression left,right;
-    
-    public Assign(Expression left, Expression right) {
-        this.left = left;
+    Id i;
+    Expression right;
+
+    public Assign(Id i, Expression right) {
+        this.i = i;
         this.right = right;
     }
 
-    public Expression getLeft() {
-        return left;
+    public Id getI() {
+        return i;
+    }
+
+    public void setI(Id i) {
+        this.i = i;
     }
 
     public Expression getRight() {
         return right;
     }
 
-    public void setLeft(Expression left) {
-        this.left = left;
-    }
-
     public void setRight(Expression right) {
         this.right = right;
-    }  
-
+    }
+    
+   
     @Override
     public void semanticValidation() {
         
-        left.semantic();
         right.semantic();
+        this.i.semantic();
+
+        if (this.i.getType().getClass() != this.right.getType().getClass()) {
+            ErrorLog.getInstance().add("Error: Asignacion con tipos incompatibles, " + this.i.getType().toStr() + " y " + this.right.getType().toStr());
+        }
         
-        if(this.left instanceof Id)
-        {
-             if(this.left.getType().getClass() != this.right.getType().getClass())
-             {
-                ErrorLog.getInstance().add("Error: Asignacion con tipos incompatibles, "+this.left.getType().toStr()+" y "+this.right.getType().toStr());
-             }
-        }//else if(this.left instanceof Array)
-        
-       
+    }
+
+    @Override
+    public String codeGenerationStament() {
+        return this.right.codeGeneration()+"stloc."+Env.getIntance().getNumber(i.getIdentifier())+"\n";
     }
     
 }

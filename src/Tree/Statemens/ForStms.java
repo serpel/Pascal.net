@@ -4,14 +4,11 @@
  */
 package Tree.Statemens;
 
+import AssemblyInfo.Assambly;
 import Semantic.Env;
-import Semantic.Environment;
 import Semantic.ErrorLog;
 import Tree.Expressions.Expression;
 import Tree.Expressions.Id;
-import Tree.Types.Bool;
-import Tree.Types.Type;
-import com.sun.corba.se.spi.ior.Identifiable;
 
 /**
  *
@@ -54,13 +51,14 @@ public class ForStms extends Statement{
 
     @Override
     public void semanticValidation() {
-        Env.newEnv();  
-        
-        Expression i = this.ass.left;
+       
+        //Env.newEnv();  
+         
+        Id i = this.ass.i;
         Expression j = this.ass.right;
         if(i instanceof Id)
         {
-            Env.getIntance().put(((Id)i).getIdentifier(), j.getType()); 
+            Env.getIntance().put(i.getIdentifier(), j.getType()); 
         }else
         {
              ErrorLog.getInstance().add("Error: For esperaba Id pero se encontro: "+i.getType().toStr());
@@ -74,12 +72,30 @@ public class ForStms extends Statement{
              ErrorLog.getInstance().add("Error: El rango de la intruccion FOR debe poseer tipos iguales, se encontro: "+this.ass.right.getType().toStr()+" y "+this.expr.getType().toStr());
         }
         
-        if(stms!=null)
+        if(stms != null)
         {
             stms.semantic();
         }
             
-        Env.restoreEnv();
+        //Env.restoreEnv();
+    }
+
+    @Override
+    public String codeGenerationStament() {
+        String etiqueta1 = Assambly.getInstance().getLabel("For");
+        String etiqueta2 = Assambly.getInstance().getLabel("EndFor");
+        
+        String asignacion, condicion, incrementar;
+        int n = Env.getIntance().getNumber(ass.i.getIdentifier());     
+        
+        asignacion = this.ass.getRight().codeGeneration()+"ldloc."+ n+ "\n"+"stloc."+n+ "\n";;
+        
+        condicion = etiqueta1+":\n"+"ldloc."+n+"\n"+this.expr.codeGeneration()+"bgt "+etiqueta2+"\n";
+        
+        incrementar = "ldloc."+n+"\nldc.i4 1\nadd\n"+"stloc."+n+"\nbr "+etiqueta1;
+        
+        return asignacion+condicion+this.stms.codeGeneration()+incrementar+"\n"+etiqueta2+":\n";
+    
     }
     
 }

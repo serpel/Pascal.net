@@ -60,4 +60,9 @@ public class Switch extends Statement{
             this._else.semantic();
         }
     }  
+
+    @Override
+    public String codeGenerationStament() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

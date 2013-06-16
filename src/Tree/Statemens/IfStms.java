@@ -4,10 +4,10 @@
  */
 package Tree.Statemens;
 
+import AssemblyInfo.Assambly;
 import Semantic.Env;
 import Semantic.ErrorLog;
 import Tree.Expressions.Expression;
-import Tree.Types.Bool;
 import Tree.Types.Type;
 
 /**
@@ -73,6 +73,18 @@ public class IfStms extends Statement{
             Env.restoreEnv();
         }       
         
+    }
+
+    @Override
+    public String codeGenerationStament() {
+        //String etiqueta1 = Assambly.getInstance().getLabel("If");
+        String etiqueta2 = Assambly.getInstance().getLabel("EndIf");
+         
+        String cVerdadero = this.ifst != null ? ifst.codeGeneration() : "";
+        String cFalso = this.elsest!=null ? elsest.codeGeneration(): "";
+//         
+//        return this.expr.codeGeneration()+"brzero "+etiqueta1+"\n"+cFalso+"\nbr "+etiqueta2+"\n"+etiqueta1+":\n"+cVerdadero+"\n"+etiqueta2+":\n";   
+        return expr.codeGeneration()+"brtrue.s "+etiqueta2+"\n"+cVerdadero+etiqueta2+":\n"+cFalso; 
     }
     
 }

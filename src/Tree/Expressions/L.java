@@ -29,4 +29,9 @@ public class L extends BinaryOp{
         super.setType(new Bool());
     }
     
+    @Override
+    public String codeGeneration() {
+        return left.codeGeneration()+right.codeGeneration()+"clt\n";
+    }
+    
 }

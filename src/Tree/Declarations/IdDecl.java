@@ -46,5 +46,10 @@ public class IdDecl extends Declarations{
     public void semanticValidation() {
         
     }
+
+    @Override
+    public String codeGenerationStament() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
 }

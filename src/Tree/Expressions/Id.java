@@ -6,6 +6,7 @@ package Tree.Expressions;
 
 import Semantic.Env;
 import Semantic.ErrorLog;
+import Semantic.SymbolTable;
 import Tree.Types.Array;
 import Tree.Types.Null;
 import Tree.Types.Record;
@@ -16,6 +17,8 @@ import Tree.Types.Type;
  * @author SergioJavier
  */
 public class Id extends Expression {
+    
+    SymbolTable table;
     String identifier;
     Expression right;
 
@@ -44,7 +47,8 @@ public class Id extends Expression {
 
         //validacion de identificadores
         Type t = Env.getIntance().getType(identifier);
-
+        //Type t = this.getEnv().getType(identifier);
+        
         if (t == null) {
             ErrorLog.getInstance().add("Error: Variable '" + this.identifier + "' no existe.");
             
@@ -99,5 +103,15 @@ public class Id extends Expression {
                 e = e.getNext();
             }
         }
+    }
+
+    @Override
+    public String codeGeneration() {     
+        String tmp="";
+        if(this.right != null)
+        {
+            tmp = right.codeGeneration();
+        }
+        return "ldloc " +Env.getIntance().getNumber(identifier)+"\n"+tmp;
     }
 }

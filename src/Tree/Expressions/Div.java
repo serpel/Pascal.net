@@ -28,4 +28,9 @@ public class Div extends BinaryOp {
         super.setType(left.getType());
     }
     
+    @Override
+    public String codeGeneration() {
+        return left.codeGeneration()+right.codeGeneration()+"div\n";
+    }
+    
 }

@@ -4,12 +4,17 @@
  */
 package Tree.Declarations;
 
+import Semantic.Env;
+import Semantic.SymbolTable;
+
 /**
  *
  * @author SergioJavier
  */
 public abstract class Declarations {   
     Declarations next=null;
+    public SymbolTable table=null;
+    public Env environtment=null;
 
     public void setNext(Declarations next) {
         this.next = next;
@@ -30,6 +35,16 @@ public abstract class Declarations {
             next.semantic();
         }
     }
-            
-           
+    
+    public abstract String codeGenerationStament();
+    
+    public String codeGeneration()
+    {
+        String valor = this.codeGenerationStament();
+        if(next!= null)
+        {
+            valor+=next.codeGeneration();
+        }
+        return valor;
+    }      
 }

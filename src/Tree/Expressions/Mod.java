@@ -28,4 +28,9 @@ public class Mod  extends BinaryOp{
         super.setType(left.getType());
     }
     
+    @Override
+    public String codeGeneration() {
+        return left.codeGeneration()+right.codeGeneration()+"rem\n";
+    }
+    
 }

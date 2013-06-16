@@ -26,5 +26,17 @@ public class LitBool extends Literal {
     public void setValue(Boolean value) {
         this.value = value;
     }
+
+    @Override
+    public String codeGen() {
+        
+        int flag = 0;
+
+        if (value) {
+            flag = 1;
+        }
+
+        return "ldc.i4." + flag + "\n";
+    }
    
 }

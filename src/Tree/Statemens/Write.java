@@ -29,4 +29,9 @@ public class Write extends Statement{
     public void semanticValidation() {
         param.semanticValidation();
     }
+
+    @Override
+    public String codeGenerationStament() {
+        return param.codeGeneration()+"call void [mscorlib]System.Console::WriteLine("+this.param.getType().toAssembly()+")\n";
+    }
 }

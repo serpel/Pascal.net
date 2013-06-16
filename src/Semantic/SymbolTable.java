@@ -5,7 +5,6 @@
 package Semantic;
 
 import Tree.Expressions.Expression;
-import Tree.Types.Null;
 import Tree.Types.Type;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -32,7 +31,7 @@ public class SymbolTable {
             table.put(name, new Integer(table.size()));
             typeTable.put(name, t);
             list.add(name);
-            typelist.add(t.toAssably());
+            typelist.add(t.toAssembly());
         }
     }
     

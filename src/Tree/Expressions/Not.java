@@ -36,5 +36,10 @@ public class Not extends Expression{
             ErrorLog.getInstance().add("Error: Negacion requiere Tipo "+this.expr.getType().toString()+".");
         }
     }
+    
+    @Override
+    public String codeGeneration() {
+        return expr.codeGeneration()+"ldc.i4.0\nceq\n";
+    }
    
 }

@@ -4,6 +4,7 @@
  */
 package Tree.Expressions;
 
+import Semantic.Env;
 import Tree.Types.Type;
 
 /**
@@ -12,7 +13,7 @@ import Tree.Types.Type;
  */
 public abstract class Expression {
     
-    Expression next=null;
+    Expression next = null;
     Type t;
 
     public abstract void semanticValidation();  
@@ -23,7 +24,7 @@ public abstract class Expression {
         
         if(next!=null)
         {
-            semantic();
+            next.semantic();
         }
     }
     
@@ -42,4 +43,6 @@ public abstract class Expression {
     public void setType(Type t){
         this.t = t;
     }
+    
+    public abstract String codeGeneration();
 }

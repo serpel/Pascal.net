@@ -47,7 +47,24 @@ public class Block extends Declarations{
         if(stms != null)
         {
             this.stms.semantic();
+        }       
+    }
+
+    @Override
+    public String codeGenerationStament() {
+        String tmp = "";
+        
+        for(Declarations d:decls)
+        {
+            tmp += d.codeGeneration();
         }
+        
+        if(stms != null)
+        {
+            tmp += this.stms.codeGeneration();
+        }
+        
+        return tmp;
     }
     
 }

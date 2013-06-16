@@ -34,8 +34,21 @@ public class Function extends Type{
         this.t = t;
     }
     
+    public java.lang.String fieldStr()
+    {
+        StringBuilder tmp = new StringBuilder("");
+        if (f != null) {
+            for (java.lang.String i : f.getIds()) {
+                tmp.append(i);
+                tmp.append(",");
+            }
+        }
+        //le quito la ultima coma
+        return tmp.substring(0, tmp.length()-1).toString();
+    }
+    
     @Override
-    public java.lang.String toAssably() {
+    public java.lang.String toAssembly() {
         return t.toStr();
     }
     

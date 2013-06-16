@@ -74,5 +74,10 @@ public class VarDecl extends Declarations{
             e = e.getNext();
         }
     }
+
+    @Override
+    public String codeGenerationStament() {
+        return Env.getIntance().getTable().getLocals();
+    }
     
 }

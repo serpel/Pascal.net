@@ -4,6 +4,9 @@
  */
 package Tree.Expressions;
 
+import Semantic.Env;
+import Tree.Types.Type;
+
 /**
  *
  * @author SergioJavier
@@ -26,7 +29,14 @@ public class FieldAccess extends Expression{
 
     @Override
     public void semanticValidation() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported yet. field access");
     }   
+
+    @Override
+    public String codeGeneration() {
+        
+        //ldfld int32 Simple::Position
+        return "ldfld "+ t.toAssembly() +" "+this.atribute.getIdentifier()+"\n";
+    }
     
 }

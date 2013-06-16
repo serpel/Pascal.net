@@ -24,4 +24,11 @@ public class LitInteger extends Literal {
     public void setValue(int value) {
         this.value = value;
     }
+
+    @Override
+    public String codeGen() {
+        return "ldc.i4 " +this.value+"\n";
+    }
+    
+    
 }

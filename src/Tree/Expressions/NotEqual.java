@@ -28,5 +28,10 @@ public class NotEqual extends BinaryOp{
         
         super.setType(new Bool());
     }
+
+    @Override
+    public String codeGeneration() {
+        return left.codeGeneration()+right.codeGeneration()+"ceq\nldc.i4 0\nceq\n";
+    }
     
 }

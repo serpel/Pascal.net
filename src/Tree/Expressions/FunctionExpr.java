@@ -4,6 +4,8 @@
  */
 package Tree.Expressions;
 
+import Semantic.Env;
+import Tree.Types.Type;
 import java.util.ArrayList;
 
 /**
@@ -39,5 +41,25 @@ public class FunctionExpr extends Expression {
     @Override
     public void semanticValidation() {
         //throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    @Override
+    public String codeGeneration() {   
+        
+        Type t = Env.getIntance().getType(this.name.getIdentifier());
+        String tmp="call "+t.toAssembly()+" "+this.name.getIdentifier()+"(";
+        
+        Expression e = this.elist;
+        while(e!=null)
+        {
+            tmp += e.getType().toAssembly();
+            tmp += ",";
+            e = e.getNext();
+        }
+        
+        tmp = tmp.substring(0,tmp.length()-1);
+        tmp += ")"; 
+        
+        return tmp;
     }
 }

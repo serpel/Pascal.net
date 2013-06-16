@@ -24,5 +24,10 @@ public class LitFloat extends Literal {
     public void setValue(float value) {
         this.value = value;
     }
+
+    @Override
+    public String codeGen() {
+        return "ldc.r4 " +this.value+"\n";
+    }
     
 }

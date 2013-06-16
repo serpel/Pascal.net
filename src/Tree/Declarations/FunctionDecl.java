@@ -62,18 +62,27 @@ public class FunctionDecl extends Declarations{
     @Override
     public void semanticValidation() {
        
-        
+        //Env.newEnv();
+        //this.environtment = Env.getIntance();
+
         Env.getIntance().put(this.name.getIdentifier(), this.t);
-        
+
         //variables locales
-        if(this.vars != null)
-        {
+        if (this.vars != null) {
             this.vars.semantic();
         }
-       
+
         if (this.stms != null) {
             this.stms.semantic();
         }
+
+        //Env.restoreEnv();
+    }
+
+    @Override
+    public String codeGenerationStament() {
+          
+        return this.stms.codeGeneration();
     }
     
 }

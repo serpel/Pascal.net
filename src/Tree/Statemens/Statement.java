@@ -4,7 +4,7 @@
  */
 package Tree.Statemens;
 
-import Semantic.Environment;
+import Semantic.Env;
 
 /**
  *
@@ -31,6 +31,18 @@ public abstract class Statement {
 
     public Statement getNext() {
         return next;
+    }
+    
+    public abstract java.lang.String codeGenerationStament();
+    
+    public java.lang.String codeGeneration()
+    {
+        String valor = this.codeGenerationStament();
+        if(next!= null)
+        {
+            valor+=next.codeGeneration();
+        }
+        return valor;
     }
     
 }

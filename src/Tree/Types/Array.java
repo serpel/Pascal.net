@@ -51,7 +51,7 @@ public class Array extends Type{
     }
 
     @Override
-    public java.lang.String toAssably() {
+    public java.lang.String toAssembly() {
         return "Array";
     }
 

@@ -82,10 +82,10 @@ StringCharacter = [^\r\n\'\\]
     ")"                { return symbol(sym.RPAR); }
     "["                { return symbol(sym.LBRACKET); }
     "]"                { return symbol(sym.RBRACKET); }
-    ">"                { return symbol(sym.GREATER_THAN_OR_EQUAL); }
-    ">="               { return symbol(sym.GREATER_THAN); }
-    "<"                { return symbol(sym.LESS_THAN); }
-    "<="               { return symbol(sym.LESS_THAN_OR_EQUAL); }
+    ">="               { return symbol(sym.GREATER_THAN_OR_EQUAL); }
+    ">"                { return symbol(sym.GREATER_THAN); }
+    "<="               { return symbol(sym.LESS_THAN); }
+    "<"                { return symbol(sym.LESS_THAN_OR_EQUAL); }
     "!="               { return symbol(sym.NOT_EQUAL); }
     "="                { return symbol(sym.EQUAL); }
     "."                { return symbol(sym.DOT); }

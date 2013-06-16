@@ -35,7 +35,7 @@ public class Record extends Type{
     }
         
     @Override
-    public java.lang.String toAssably() {
+    public java.lang.String toAssembly() {
         return "";
     }
     

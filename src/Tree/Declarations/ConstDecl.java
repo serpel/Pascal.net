@@ -26,4 +26,9 @@ public class ConstDecl extends Declarations{
         //throw new UnsupportedOperationException("Not supported yet.");
         //Env.getIntance().put(name.getIdentifier(), null);
     }
+
+    @Override
+    public String codeGenerationStament() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

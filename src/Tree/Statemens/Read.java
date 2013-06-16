@@ -14,32 +14,25 @@ import Tree.Expressions.Id;
  * @author SergioJavier
  */
 public class Read extends Statement{
-    Expression param;
+    Id i;
 
-    public Read(Expression param) {
-        this.param = param;
-    }
-
-    public void setParam(Expression param) {
-        this.param = param;
-    }
-
-    public Expression getParam() {
-        return param;
+    public Read(Id i) {
+        this.i = i;
     }
 
     @Override
     public void semanticValidation() {
-          
-//        if(this.param instanceof Id)
-//        {
-//            String id = ((Id)param).getIdentifier();
-//            if(Env.getIntance().get(id) == null)
-//            {
-//                ErrorLog.getInstance().add("Error: variable '"+id+"' no existe.");
-//            }
-//        }
-        param.semanticValidation();
+        i.semanticValidation();
     }
+
+    @Override
+    public String codeGenerationStament() {
+        
+        String tmp;
+        tmp = "call " + i.getType().toStr() + " [mscorlib]System.Console::ReadLine()\n";
+        tmp += "stloc."+Env.getIntance().getNumber(i.getIdentifier())+"\n";
+        
+        return tmp;
+      }
     
 }

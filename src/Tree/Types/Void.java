@@ -11,7 +11,7 @@ package Tree.Types;
 public class Void extends Type{
 
     @Override
-    public java.lang.String toAssably() {
+    public java.lang.String toAssembly() {
         return "Void";
     }
     

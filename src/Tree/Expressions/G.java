@@ -30,4 +30,9 @@ public class G  extends BinaryOp{
         super.setType(new Bool());
     } 
     
+    @Override
+    public String codeGeneration() {
+        return left.codeGeneration()+right.codeGeneration()+"cgt\n";
+    }
+    
 }

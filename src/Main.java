@@ -9,20 +9,26 @@
   by Gerwin Klein
 */
 
+import Semantic.Env;
 import Semantic.ErrorLog;
 import Tree.Declarations.Declarations;
+import Tree.Declarations.Program;
 import java.io.*;
    
 public class Main {
   static public void main(String argv[]) {    
     /* Start the parser */
     try {      
-      parser p = new parser(new Lexer(new FileReader("src/raiz.pas")));
+      parser p = new parser(new Lexer(new FileReader("src/sort.pas")));
       Declarations result = (Declarations)p.parse().value;
+      
       
       result.semantic();
       
       ErrorLog.getInstance().print();
+      
+      System.out.println(result.codeGeneration());
+      
       
       int value=1;
       //System.out.println(result);

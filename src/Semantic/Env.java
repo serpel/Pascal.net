@@ -15,9 +15,8 @@ public class Env {
     
     private static Env instance=null;
     private static Env tmp=null;
-    private SymbolTable table;   
+    public SymbolTable table;   
     private Env prev;
-
     
     private Env(Env prev) {
         this.prev = prev;
@@ -41,6 +40,11 @@ public class Env {
     {
         tmp = instance;
         instance = new Env(instance);
+    }
+    
+    public static Env newEnvirontment()
+    {
+        return new Env(instance);
     }
     
     public static void restoreEnv()
@@ -81,5 +85,8 @@ public class Env {
         } 
         return found;
     }
-    
+
+    public SymbolTable getTable() {
+        return table;
+    }
 }

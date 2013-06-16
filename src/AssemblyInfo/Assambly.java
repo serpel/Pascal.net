@@ -19,14 +19,8 @@ public class Assambly {
     Hashtable<String, Integer> label = new java.util.Hashtable<>();
     
     private Assambly() {
-        if(name.isEmpty())
-        {
-            name = "test";
-        }
-        if(version.isEmpty())
-        {
-            version = "1:0:1:0";
-        }
+        this.name = "test";
+        this.version = "1:0:1:0";
         this.hederInfo();
     }
 

@@ -61,5 +61,10 @@ public class TypeDecl extends Declarations{
         }
         Env.getIntance().put(id.getIdentifier(), t);
     }
+
+    @Override
+    public String codeGenerationStament() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
 }

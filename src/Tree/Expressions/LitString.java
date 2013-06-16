@@ -24,5 +24,10 @@ public class LitString extends Literal {
     public void setValue(String value) {
         this.value = value;
     }
+
+    @Override
+    public String codeGen() {
+        return "ldstr " +this.value+"\n";
+    }
        
 }

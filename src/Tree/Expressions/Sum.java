@@ -27,4 +27,10 @@ public class Sum extends BinaryOp {
         
         super.setType(left.getType());
     }
+
+    @Override
+    public String codeGeneration() {
+        return left.codeGeneration()+right.codeGeneration()+"add\n";
+    }
+
 }

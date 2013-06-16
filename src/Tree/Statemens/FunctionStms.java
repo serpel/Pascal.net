@@ -10,7 +10,7 @@ import Tree.Expressions.Expression;
 import Tree.Expressions.Id;
 import Tree.Types.Function;
 import Tree.Types.Type;
-import java.util.ArrayList;
+import javax.xml.stream.events.EndDocument;
 
 /**
  *
@@ -58,6 +58,7 @@ public class FunctionStms extends Statement{
 
     @Override
     public void semanticValidation() {
+        Env.newEnv();
         
         Type t = Env.getIntance().getType(this.name.getIdentifier());
         Type t2 = new Function(null,null);
@@ -77,6 +78,13 @@ public class FunctionStms extends Statement{
             
             //verifica orden parametros
         }
+        
+        Env.restoreEnv();
+    }
+
+    @Override
+    public String codeGenerationStament() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
 }

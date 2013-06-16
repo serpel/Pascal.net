@@ -45,4 +45,9 @@ public class Case extends Statement {
             this.stms.semantic();
         }
     }
+
+    @Override
+    public String codeGenerationStament() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

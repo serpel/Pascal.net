@@ -16,6 +16,7 @@ public class Program extends Declarations{
     Id name;
     Field f;
     Declarations block;
+    public String tmp;
 
     public Program(Id name, Field f, Declarations block) {
         this.name = name;
@@ -51,7 +52,7 @@ public class Program extends Declarations{
     public void semanticValidation() {
 
         //codigo dentro de la funcion
-        Env.newEnv();
+        //Env.newEnv();
         
         if (f != null) {
             for (String i : f.getIds()) {
@@ -64,7 +65,16 @@ public class Program extends Declarations{
         {
             this.block.semantic();
         }
-        Env.restoreEnv();
+        //generacion
+        
+        //tmp = this.codeGenerationStament();
+        
+       // Env.restoreEnv();
+    }
+
+    @Override
+    public String codeGenerationStament() {
+        return this.block.codeGeneration();
     }
     
 }

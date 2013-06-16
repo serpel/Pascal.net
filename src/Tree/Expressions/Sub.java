@@ -28,4 +28,9 @@ public class Sub extends BinaryOp {
         
         super.setType(left.getType());
     }
+
+    @Override
+    public String codeGeneration() {
+        return left.codeGeneration()+right.codeGeneration()+"sub\n";
+    }
 }

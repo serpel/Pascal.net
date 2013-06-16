@@ -4,7 +4,7 @@
  */
 package Tree.Statemens;
 
-import Semantic.Env;
+import AssemblyInfo.Assambly;
 import Semantic.ErrorLog;
 import Tree.Expressions.Expression;
 import Tree.Types.Bool;
@@ -43,19 +43,33 @@ public class RepeatStms extends Statement{
     @Override
     public void semanticValidation() {  
               
-        Type t = new Bool();
-        if(this.expr.getType().getClass() != t.getClass())
-        {
-            ErrorLog.getInstance().add("Error: While no soporta tipo "+this.expr.getType().toString());
-        }    
+        Type t = new Bool();      
         
         if (stms != null) {
-            Env.newEnv();
             stms.semantic();
-            Env.restoreEnv();
         }
         
         this.expr.semantic();
+         
+        if(this.expr.getType().getClass() != t.getClass())
+        {
+            ErrorLog.getInstance().add("Error: While no soporta tipo "+this.expr.getType().toString());
+        }  
+        
+       
+    }
+
+    @Override
+    public String codeGenerationStament() {
+        java.lang.String etiqueta1 = Assambly.getInstance().getLabel("repeat");
+        java.lang.String codeRepeat = "";
+
+        if (this.stms != null) {
+            codeRepeat = this.codeGeneration();
+        }
+
+        return etiqueta1 + ":\n" + codeRepeat + this.expr.codeGeneration() + "brtrue.s " + etiqueta1 + "\n";
+
     }
 
 }

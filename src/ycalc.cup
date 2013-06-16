@@ -95,7 +95,7 @@ non terminal Expression addition;
 non terminal Expression literal;
 non terminal Expression ids;
 non terminal Expression accesor_list;
-non terminal Expression variable;
+non terminal Id variable;
 
 non terminal Statement stms; 
 non terminal Statement statement;
@@ -256,7 +256,9 @@ statement ::= function_stms:f SEMICOLON
               {: RESULT=new Switch(ex,cl,e); :} 
               |
               WHILE expr:e DO compound:c 
-              {: RESULT=new WhileStms(e,c); :}  
+              {: 
+                 RESULT = new WhileStms(e,c);
+              :}  
               |
               FOR ID:i ASSIGN expr:r TO expr:e DO compound:c
               {: RESULT=new ForStms(new Assign(new Id(i),r),e,c); :}  

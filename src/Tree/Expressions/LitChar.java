@@ -26,4 +26,9 @@ public class LitChar extends Literal {
     public void setlValue(char value) {
         this.value = value;
     }  
+
+    @Override
+    public String codeGen() {
+        return "ldc.i4.s " +(int)this.value+"\n";
+    }
 }

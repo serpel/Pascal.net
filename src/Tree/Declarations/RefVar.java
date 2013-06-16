@@ -42,5 +42,10 @@ public class RefVar extends Declarations{
     public void semanticValidation() {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public String codeGenerationStament() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
 }
