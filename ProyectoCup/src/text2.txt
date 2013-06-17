@@ -1,0 +1,25 @@
+import java_cup.runtime.*;
+import java.util.*; 
+import java.*;
+
+parser code {:
+    
+  public Hashtable<String,Integer> vars = new Hashtable<String,Integer>(); 
+
+:};
+  
+   
+terminal    MULT, PLUS, CERO, UNO;
+   
+non terminal Object     E, B, S;
+   
+   S ::= E ;
+   
+   E ::= E MULT B
+       | E PLUS B
+       | B
+       ;
+
+   B ::= CERO
+       | UNO
+       ;

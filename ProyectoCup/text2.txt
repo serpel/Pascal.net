@@ -1,0 +1,28 @@
+import java_cup.runtime.*;
+import java.util.*; 
+import java.*;
+
+parser code {:
+    
+  public Hashtable<String,Integer> vars = new Hashtable<String,Integer>(); 
+
+:};
+  
+   
+terminal    SEMI, PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN,EQUALS,PRINT, E, B;
+terminal    NUMBER;
+terminal    ID;
+   
+non terminal Object     expr_list, expr_part;
+non terminal ArrayList<Integer>   expr, factor, term;
+   
+   S ::= E ;
+   
+   E ::= E MULT B
+       | E PLUS B
+       | B
+       ;
+
+   B ::= CERO
+       | UNO
+       ;
