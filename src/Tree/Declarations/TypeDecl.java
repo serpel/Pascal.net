@@ -7,6 +7,7 @@ package Tree.Declarations;
 import Semantic.Env;
 import Tree.Expressions.Expression;
 import Tree.Expressions.Id;
+import Tree.Types.Array;
 import Tree.Types.Custom;
 import Tree.Types.Record;
 import Tree.Types.Type;
@@ -19,10 +20,12 @@ public class TypeDecl extends Declarations{
     
     Id id;
     Type t;
+    public String record;
 
     public TypeDecl(Id id, Type t) {
         this.id = id;
         this.t = t;
+        record = "";
     }
 
     public Expression getId() {
@@ -57,14 +60,24 @@ public class TypeDecl extends Declarations{
         
         if(t instanceof Record )
         {
-            
+            Env.getIntance().putRecord(id.getIdentifier(), t);
+        }else {
+            Env.getIntance().put(id.getIdentifier(), t);
         }
-        Env.getIntance().put(id.getIdentifier(), t);
     }
 
     @Override
     public String codeGenerationStament() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String tmp = "";
+
+        Record r = (Record) t;
+        tmp += ".class public auto ansi beforefieldinit " + this.id.getIdentifier() + "\n"
+                + "extends [mscorlib]System.Object\n"
+                + "{\n";
+        tmp += r.toAssembly();
+        tmp += "}\n";
+
+        return tmp;
     }
     
 }

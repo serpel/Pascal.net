@@ -34,17 +34,21 @@ public class Function extends Type{
         this.t = t;
     }
     
-    public java.lang.String fieldStr()
-    {
+    public java.lang.String fieldStr() {
         StringBuilder tmp = new StringBuilder("");
+        java.lang.String _tmp = "";
         if (f != null) {
             for (java.lang.String i : f.getIds()) {
                 tmp.append(i);
                 tmp.append(",");
             }
+
+            if (tmp.length() > 0) {
+                _tmp = tmp.substring(0, tmp.length() - 1).toString();
+            }
         }
         //le quito la ultima coma
-        return tmp.substring(0, tmp.length()-1).toString();
+        return _tmp;
     }
     
     @Override

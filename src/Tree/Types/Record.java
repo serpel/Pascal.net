@@ -12,6 +12,7 @@ import Tree.Declarations.VarDecl;
 import Tree.Expressions.Expression;
 import Tree.Expressions.Id;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 /**
@@ -36,7 +37,17 @@ public class Record extends Type{
         
     @Override
     public java.lang.String toAssembly() {
-        return "";
+        
+        java.lang.String tmp = "";
+        Enumeration e = table.keys();
+        Object clave;
+        Tree.Types.Type valor;
+        while(e.hasMoreElements() ){
+            clave = e.nextElement();
+            valor = table.get( clave );
+            tmp += ".field public " + valor.toAssembly() +" "+ clave + "\n";            
+        }
+        return tmp;
     }
     
     @Override

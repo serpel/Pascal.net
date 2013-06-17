@@ -15,7 +15,9 @@ public abstract class Declarations {
     Declarations next=null;
     public SymbolTable table=null;
     public Env environtment=null;
+    public String tmp = "";
 
+    
     public void setNext(Declarations next) {
         this.next = next;
     }

@@ -8,81 +8,77 @@ import Semantic.Env;
 import Tree.Expressions.Id;
 import Tree.Statemens.Statement;
 import Tree.Types.Field;
+import Tree.Types.Function;
 import Tree.Types.Type;
+import java.util.ArrayList;
 
 /**
  *
  * @author SergioJavier
  */
 public class FunctionDecl extends Declarations{
+    
     Id name;
+    ArrayList<Argument> args;
     Type t;
     Declarations vars;
     Statement stms;
 
-    public FunctionDecl(Id name, Type t, Declarations vars, Statement stms) {
+    public FunctionDecl(Id name, ArrayList<Argument> args, Type t, Declarations vars, Statement stms) {
         this.name = name;
+        this.args = args;
         this.t = t;
         this.vars = vars;
         this.stms = stms;
-    }
-
-    public Id getName() {
-        return name;
-    }
-
-    public void setName(Id name) {
-        this.name = name;
-    }
-
-    public Type getT() {
-        return t;
-    }
-
-    public void setT(Type t) {
-        this.t = t;
-    }
-
-    public Declarations getVars() {
-        return vars;
-    }
-
-    public void setVars(Declarations vars) {
-        this.vars = vars;
-    }
-
-    public Statement getStms() {
-        return stms;
-    }
-
-    public void setStms(Statement stms) {
-        this.stms = stms;
-    }
-
+    }  
+    
     @Override
     public void semanticValidation() {
-       
-        //Env.newEnv();
-        //this.environtment = Env.getIntance();
-
-        Env.getIntance().put(this.name.getIdentifier(), this.t);
-
+          
+        Env.getIntance().putFunction(this.name.getIdentifier(), this.t);
+        //Nuevo environtment
+        Env.newEnv();  
+        
+        //validacion de argumentos dentro del entorno
+        if (this.args != null) {
+            for (Argument a : args) {
+                a.semantic();
+            }
+        }
+        
         //variables locales
         if (this.vars != null) {
             this.vars.semantic();
         }
-
+        
         if (this.stms != null) {
             this.stms.semantic();
         }
-
-        //Env.restoreEnv();
+        super.environtment = Env.getIntance();
+        Env.restoreEnv();
     }
 
     @Override
     public String codeGenerationStament() {
-          
-        return this.stms.codeGeneration();
+        
+        Env.setInstance(super.environtment);
+        String tmp = "", ret = "";
+        
+        tmp += ".method public int32 "+this.name.getIdentifier()+"("+Env.getIntance().getTable().getArgs()+") cil managed\n";
+        tmp += "{\n";
+        tmp += ".maxstack  100\n";
+        tmp += Env.getIntance().getTable().getLocals() +"\n"+ this.stms.codeGeneration();
+        
+        
+        Type _t = new Tree.Types.Void();
+        if(this.t.getClass() != _t.getClass())
+        {
+            ret = "ret\n";
+        }
+        
+        tmp += ret+"}\n";
+        
+        return tmp;
     }
     
 }

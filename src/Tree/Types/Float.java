@@ -12,7 +12,7 @@ public class Float extends Type{
 
     @Override
     public java.lang.String toAssembly() {
-        return "Float32";
+        return "r4";
     }
     
     @Override

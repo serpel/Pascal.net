@@ -4,6 +4,7 @@
  */
 package Tree.Declarations;
 
+import AssemblyInfo.Assambly;
 import Semantic.Env;
 import Tree.Expressions.Id;
 import Tree.Statemens.Statement;
@@ -16,25 +17,28 @@ import java.util.ArrayList;
  */
 public class Program extends Declarations{
     Id name;
-    Field f;
+    ArrayList<Argument> args;
     ArrayList<Declarations> decls;
     Statement stms;
 
-    public Program(Id name, Field f, ArrayList<Declarations> decl, Statement stms) {
+    public Program(Id name, ArrayList<Argument> args, ArrayList<Declarations> decls, Statement stms) {
         this.name = name;
-        this.f = f;
-        this.decls = decl;
+        this.args = args;
+        this.decls = decls;
         this.stms = stms;
+    }
+
+    public Id getName() {
+        return name;
     }
     
     @Override
     public void semanticValidation() {
         
-        //nombre de la funcion
-        if (f != null) {
-            for (String i : f.getIds()) {
-                Type t = f.get(i);
-                Env.getIntance().put(i, t);
+        //argumentos del programa
+        if (args != null) {
+            for (Argument d : args) {
+                d.semantic();
             }
         }
 
@@ -51,15 +55,20 @@ public class Program extends Declarations{
 
     @Override
     public String codeGenerationStament() {
+         
+        Assambly.getInstance().setInfo(this.name.getIdentifier(), "1:0:1:0");
         
-        String main = "", funcion = "";
+        String main = "", funcion = "", types = "";
 
-        main += ".method static void  Main() cil managed {\n";
+        main += ".method static void  Main() cil managed {\n\n";
+        main += ".entrypoint\n.maxstack  100\n\n";
 
         for (Declarations d : decls) {
 
             if (d instanceof FunctionDecl) {
                 funcion += d.codeGeneration();
+            } else if (d instanceof TypeDecl) {
+                types += d.codeGeneration();
             } else {
                 main += d.codeGeneration();
             }
@@ -69,9 +78,12 @@ public class Program extends Declarations{
             main += this.stms.codeGeneration();
         }
 
+        main += "ret\n";
         main += "}\n";
+        
+        Assambly.getInstance().setBody(types + funcion + main);
 
-        return funcion + main;
+        return Assambly.getInstance().getProgram();
     }
     
 }

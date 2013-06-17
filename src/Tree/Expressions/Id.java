@@ -107,11 +107,20 @@ public class Id extends Expression {
 
     @Override
     public String codeGeneration() {     
-        String tmp="";
+        String tmp = "", r = "";
         if(this.right != null)
         {
-            tmp = right.codeGeneration();
+            r = right.codeGeneration();
         }
-        return "ldloc " +Env.getIntance().getNumber(identifier)+"\n"+tmp;
+        
+        if(Env.getIntance().getArgNumber(identifier) != -1)
+        {
+            tmp = "ldarg " +Env.getIntance().getArgNumber(identifier)+"\n"+r;
+        }else
+        {
+            tmp = "ldloc " +Env.getIntance().getNumber(identifier)+"\n"+tmp;
+        }
+        
+        return tmp;
     }
 }

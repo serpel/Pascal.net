@@ -5,8 +5,10 @@
 package Semantic;
 
 import Tree.Expressions.Expression;
+import Tree.Types.Record;
 import Tree.Types.Type;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 /**
@@ -15,11 +17,21 @@ import java.util.Hashtable;
  */
 public class SymbolTable {
     
+    //variables
     Hashtable<String,Integer> table = new Hashtable<>();
     Hashtable<String,Type> typeTable = new Hashtable<>();
-    Hashtable<String,Expression> valueTable = new Hashtable<>();
     ArrayList<String> list = new ArrayList<String>();
     ArrayList<String> typelist = new ArrayList<String>();
+    
+    //funciones 
+    Hashtable<String,Type> funtions = new Hashtable<>();
+    Hashtable<String,Type> arguments = new Hashtable<>();
+    Hashtable<String,Type> localFunctions = new Hashtable<>();
+    Hashtable<String,Integer> argumentInt = new Hashtable<>();
+    
+       
+    //records
+    Hashtable<String, Type> records = new Hashtable<>();
 
     public SymbolTable() {
     }
@@ -31,23 +43,57 @@ public class SymbolTable {
             table.put(name, new Integer(table.size()));
             typeTable.put(name, t);
             list.add(name);
-            typelist.add(t.toAssembly());
+            typelist.add(t.toStr());
+        }else
+        {
+             ErrorLog.getInstance().add("Error: No se puede crear variable '"+name+"', este ya existe.\n");
         }
     }
     
-    public Expression getValue(String name)
+    public void addFunction(String name, Type t)
     {
-        if(valueTable.containsKey(name))
+        if(!funtions.containsKey(name))
         {
-            return valueTable.get(name);
+            funtions.put(name, t);
+        }else
+        {
+            ErrorLog.getInstance().add("Error: No se puede crear function '"+name+"', este ya existe.\n");
         }
-        return null;
     }
     
-    public int getNumber(String name)
+    public void addArgument(String name, Type t)
     {
-        if(table.containsKey(name))
+        if(!arguments.containsKey(name))
         {
+            arguments.put(name, t);
+            argumentInt.put(name, new Integer(argumentInt.size()));
+        }else
+        {
+            ErrorLog.getInstance().add("Error: No se puede crear argumento '"+name+"', duplicado.\n");
+        }
+    }
+    
+    public void addRecord(String name, Type t)
+    {
+        if(!records.containsKey(name))
+        {
+            records.put(name, t);
+        }else
+        {
+            ErrorLog.getInstance().add("Error: No se puede crear Registro '"+name+"', este ya existe.\n");
+        }
+    }
+    
+    public int getArgNumber(String name) {
+        
+        if (argumentInt.containsKey(name)) {
+            return argumentInt.get(name).intValue();
+        }    
+        return -1;
+    }
+    
+    public int getNumber(String name) {
+        if (table.containsKey(name)) {
             return table.get(name).intValue();
         }
         return -1;
@@ -80,5 +126,22 @@ public class SymbolTable {
          local.append(")\n");
          return local.toString();
      }
+     
+     public String getArgs() {
+        String tmp = "";
+        Enumeration e = this.arguments.keys();
+        Object clave;
+        Type valor;
+        while (e.hasMoreElements()) {
+            clave = e.nextElement();
+            valor = this.arguments.get(clave);
+            tmp += valor.toAssembly() + " " + clave + ",";
+        }
+
+        if (tmp.length() > 0) {
+            tmp = tmp.substring(0, tmp.length() - 1);
+        }
+        return tmp;
+    }
 
 }

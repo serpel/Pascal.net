@@ -1,14 +1,26 @@
 program raiz();
  (*Obtener la raíz cuadrada de un número real x cualquiera.*)
  
+type
+   alumnos = record
+                 nombre: string;
+                 edad: int;
+             end;
  var 
-    i: int;
- 
- begin
+   i: int;
 
-   for i := 0 to 10 do
+ function ReadArr(base:int;exp:int):string;
+ var
+    c: int;
+ begin
+    c := base;
+ end;
+
    begin
-    writeln(i);
+
+   for i := 1 to 10 do
+   begin
+    writeln(i*2);
    end
 
  end.

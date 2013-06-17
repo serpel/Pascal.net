@@ -70,15 +70,15 @@ terminal char    CHAR_LITERAL;
 non terminal productions principales
 -------------------------------------
 */
+non terminal ArrayList<Argument> params;
 
 non terminal Declarations program;
-non terminal Declarations block;
 non terminal ArrayList<Declarations> decl_seq;
 non terminal Declarations functions;
 non terminal Declarations function;
 //non terminal Declarations constant;
-non terminal Declarations const_list;
-non terminal Declarations const_decl;
+//non terminal Declarations const_list;
+//non terminal Declarations const_decl;
 non terminal Declarations type_list;
 non terminal Declarations type_decl;
 non terminal Declarations type_body;
@@ -106,14 +106,12 @@ non terminal Statement case_list;
 non terminal Statement case;
 
 non terminal Hashtable<String, Type> record_body;
-non terminal Field params;
-non terminal Field parameter;
 
 non terminal Type type;
 
 /* BEGIN */
 
-program   ::= PROGRAM ID:i parameter:p SEMICOLON decl_seq:d compound:c DOT
+program   ::= PROGRAM ID:i LPAR params:p RPAR SEMICOLON decl_seq:d compound:c DOT
               {: RESULT=new Program(new Id(i),p,d,c); :}
               |
               ;
@@ -152,17 +150,17 @@ var_decl  ::= VAR decl_list:d
               |
               ;
 
-const_list::= const_decl:c const_list:l 
-              {: 
-                c.setNext(l);
-                RESULT=c; 
-              :}
-              |
-              ;
+//const_list::= const_decl:c const_list:l 
+//              {: 
+//                c.setNext(l);
+//                RESULT=c; 
+//              :}
+//              |
+//              ;
 
-const_decl::= ID:i EQUAL literal:l SEMICOLON
-              {: RESULT=new ConstDecl(new Id(i),l); :}
-              ;
+//const_decl::= ID:i EQUAL literal:l SEMICOLON
+//              {: RESULT=new ConstDecl(new Id(i),l); :}
+//              ;
 
 type_list ::= type_body:b type_list:l
               {: 
@@ -180,30 +178,26 @@ functions ::= function:f functions:fs
               |
               ;
 
-function  ::= FUNCTION ID:i parameter:p COLON type:t SEMICOLON var_decl:v compound:c SEMICOLON
-              {: RESULT=new FunctionDecl(new Id(i),new Function(p, t),v,c);  :}
+function  ::= FUNCTION ID:i LPAR params:p RPAR COLON type:t SEMICOLON var_decl:v compound:c SEMICOLON
+              {: RESULT=new FunctionDecl(new Id(i),p,t,v,c);  :}
               ;
       
 type_body ::= ID:i EQUAL type:t SEMICOLON
               {: RESULT=new TypeDecl(new Id(i),t); :}
               ;
 
-parameter ::= LPAR params:p RPAR
-              {: RESULT=p; :}
-              |
-              ;
-
 params    ::= ID:i COLON type:t SEMICOLON params:p
               {:
-                p.put(i,t);
+                p.add(new Argument(new Id(i),t));
                 RESULT = p;
               :}
               | 
               ID:i COLON type:t
-              {:        
-                Field prs = new Field();
-                prs.put(i,t);
-                RESULT = prs;
+              {:
+                ArrayList<Argument> args = new ArrayList<>();   
+                args.add(new Argument(new Id(i),t));
+
+                RESULT = args;
               :} 
               |
               ;

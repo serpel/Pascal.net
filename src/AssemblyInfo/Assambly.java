@@ -21,6 +21,7 @@ public class Assambly {
     private Assambly() {
         this.name = "test";
         this.version = "1:0:1:0";
+        this.header = this.body = this.footer = "";
         this.hederInfo();
     }
 
@@ -59,7 +60,7 @@ public class Assambly {
     {   
         StringBuilder head = new StringBuilder("\n"); 
         
-        //assamblies
+        //ass
         head.append(".assembly extern mscorlib {}\n");
         head.append(".assembly "); head.append(this.name); 
         head.append("\n{\n");head.append("\t.ver "); head.append(this.version);head.append("\n}\n");

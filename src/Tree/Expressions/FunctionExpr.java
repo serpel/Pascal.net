@@ -46,8 +46,11 @@ public class FunctionExpr extends Expression {
     @Override
     public String codeGeneration() {   
         
+        String tmp = "";
         Type t = Env.getIntance().getType(this.name.getIdentifier());
-        String tmp="call "+t.toAssembly()+" "+this.name.getIdentifier()+"(";
+        
+        tmp += this.elist.codeGeneration();
+        tmp +="call "+t.toAssembly()+" "+this.name.getIdentifier()+"(";
         
         Expression e = this.elist;
         while(e!=null)
@@ -58,7 +61,7 @@ public class FunctionExpr extends Expression {
         }
         
         tmp = tmp.substring(0,tmp.length()-1);
-        tmp += ")"; 
+        tmp += ")\n"; 
         
         return tmp;
     }
