@@ -101,7 +101,13 @@ public class SymbolTable {
     
     public Type getType(String name)
     {       
-        return typeTable.get(name);
+        Type t = arguments.get(name);
+        
+        if(t == null)
+        {
+            t = typeTable.get(name);
+        }
+        return t;
     }
     
      public String getLocals()
