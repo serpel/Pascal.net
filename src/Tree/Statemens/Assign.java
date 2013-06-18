@@ -8,6 +8,8 @@ import Semantic.Env;
 import Semantic.ErrorLog;
 import Tree.Expressions.Expression;
 import Tree.Expressions.Id;
+import Tree.Types.Array;
+import Tree.Types.Type;
 
 /**
  *
@@ -45,16 +47,39 @@ public class Assign extends Statement{
         
         right.semantic();
         this.i.semantic();
+        
 
         if (this.i.getType().getClass() != this.right.getType().getClass()) {
             ErrorLog.getInstance().add("Error: Asignacion con tipos incompatibles, " + this.i.getType().toStr() + " y " + this.right.getType().toStr());
         }
-        
     }
 
     @Override
     public String codeGenerationStament() {
-        return this.right.codeGeneration()+"stloc."+Env.getIntance().getNumber(i.getIdentifier())+"\n";
+
+        StringBuilder builder = new StringBuilder();
+        String code = "";
+
+        Type _t = this.i.getType();
+        
+        if (_t instanceof Array) {
+            _t = ((Array) this.i.getType());
+
+            builder.append("ldloc ").append(Env.getIntance().getNumber(this.i.getIdentifier())).append("\n");
+
+           // Expression e = _t.getExprs();
+
+//            while (e != null) {
+//                e = e.getNext();
+//            }
+        } else if (Env.getIntance().getFunction(i.getIdentifier()) != null) {
+            code = this.right.code();
+        } else {
+            code = this.right.code() + "stloc." + Env.getIntance().getNumber(i.getIdentifier()) + "\n";
+
+        }
+
+        return code;
     }
-    
+
 }

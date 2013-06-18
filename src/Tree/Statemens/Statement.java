@@ -12,6 +12,7 @@ import Semantic.Env;
  */
 public abstract class Statement { 
     Statement next=null;
+    public String fname = "";
     
     public abstract void semanticValidation(); 
     

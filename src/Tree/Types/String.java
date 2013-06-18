@@ -12,11 +12,11 @@ public class String extends Type{
 
     @Override
     public java.lang.String toAssembly() {
-        return "String";
+        return "string";
     }
     @Override
     public java.lang.String toStr() {
-        return "String";
+        return "string";
     }
     
     

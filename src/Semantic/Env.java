@@ -26,6 +26,21 @@ public class Env {
     public static void setInstance(Env instance) {
         Env.instance = instance;
     }
+    
+    public Type getFunction(String name)
+    {
+        Type found = null;
+        for(Env e=this; e!=null; e=e.prev)
+        {
+            found = e.table.getfunction(name);
+            
+            if(found != null)
+            {
+                return found;
+            }
+        } 
+        return found;
+    }
 
     public static Env getIntance() {
         

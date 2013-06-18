@@ -41,8 +41,11 @@ public class FunctionDecl extends Declarations{
         
         //validacion de argumentos dentro del entorno
         if (this.args != null) {
-            for (Argument a : args) {
-                a.semantic();
+            
+            for(int i = this.args.size()-1; i >= 0; i--)
+            {
+                Declarations d = this.args.get(i);
+                d.semantic();
             }
         }
         
@@ -53,7 +56,7 @@ public class FunctionDecl extends Declarations{
         
         if (this.stms != null) {
             this.stms.semantic();
-        }
+        }       
         super.environtment = Env.getIntance();
         Env.restoreEnv();
     }
@@ -61,22 +64,18 @@ public class FunctionDecl extends Declarations{
     @Override
     public String codeGenerationStament() {
         
+        Env te = Env.getIntance();
         Env.setInstance(super.environtment);
         String tmp = "", ret = "";
         
-        tmp += ".method public int32 "+this.name.getIdentifier()+"("+Env.getIntance().getTable().getArgs()+") cil managed\n";
+        tmp += ".method public static "+this.t.toAssembly()+" "+this.name.getIdentifier()+"("+Env.getIntance().getTable().getArgs()+") cil managed\n";
         tmp += "{\n";
         tmp += ".maxstack  100\n";
         tmp += Env.getIntance().getTable().getLocals() +"\n"+ this.stms.codeGeneration();
         
+        tmp += "ret\n}\n";
         
-        Type _t = new Tree.Types.Void();
-        if(this.t.getClass() != _t.getClass())
-        {
-            ret = "ret\n";
-        }
-        
-        tmp += ret+"}\n";
+        Env.setInstance(te);
         
         return tmp;
     }

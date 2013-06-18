@@ -21,6 +21,7 @@ public class Id extends Expression {
     SymbolTable table;
     String identifier;
     Expression right;
+    public String fname;
 
     public Id(String Identifier) {
         this.identifier = Identifier;
@@ -50,10 +51,14 @@ public class Id extends Expression {
         //Type t = this.getEnv().getType(identifier);
         
         if (t == null) {
-            ErrorLog.getInstance().add("Error: Variable '" + this.identifier + "' no existe.");
             
-            // Warning fix temporal
-            super.setType(new Null());
+            t = Env.getIntance().getFunction(identifier);
+            if( t == null ){
+                ErrorLog.getInstance().add("Error: Variable '" + this.identifier + "' no existe."); 
+                super.setType(new Null());
+            }         
+            super.setType(t);
+            
         } else {
             
             super.setType(t);
@@ -108,17 +113,14 @@ public class Id extends Expression {
     @Override
     public String codeGeneration() {     
         String tmp = "", r = "";
-        if(this.right != null)
-        {
+        if (this.right != null) {
             r = right.codeGeneration();
         }
         
-        if(Env.getIntance().getArgNumber(identifier) != -1)
-        {
-            tmp = "ldarg " +Env.getIntance().getArgNumber(identifier)+"\n"+r;
-        }else
-        {
-            tmp = "ldloc " +Env.getIntance().getNumber(identifier)+"\n"+tmp;
+        if (Env.getIntance().getArgNumber(identifier) != -1) {
+            tmp = "ldarg " + Env.getIntance().getArgNumber(identifier) + "\n" + r;
+        } else {
+            tmp = "ldloc " + Env.getIntance().getNumber(identifier) + "\n" + tmp;
         }
         
         return tmp;

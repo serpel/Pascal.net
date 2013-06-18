@@ -21,6 +21,7 @@ public class TypeDecl extends Declarations{
     Id id;
     Type t;
     public String record;
+    public String arr;
 
     public TypeDecl(Id id, Type t) {
         this.id = id;
@@ -70,12 +71,17 @@ public class TypeDecl extends Declarations{
     public String codeGenerationStament() {
         String tmp = "";
 
-        Record r = (Record) t;
-        tmp += ".class public auto ansi beforefieldinit " + this.id.getIdentifier() + "\n"
-                + "extends [mscorlib]System.Object\n"
-                + "{\n";
-        tmp += r.toAssembly();
-        tmp += "}\n";
+        if (t instanceof Record) {
+            Record r = (Record) t;
+            tmp += ".class public auto ansi beforefieldinit " + this.id.getIdentifier() + "\n"
+                    + "extends [mscorlib]System.Object\n"
+                    + "{\n";
+            tmp += r.toAssembly();
+            tmp += "}\n";
+        }else if(t instanceof Array)
+        {
+            Array a = (Array) t;
+        }
 
         return tmp;
     }

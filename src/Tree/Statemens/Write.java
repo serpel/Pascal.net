@@ -32,6 +32,6 @@ public class Write extends Statement{
 
     @Override
     public String codeGenerationStament() {
-        return param.codeGeneration()+"call void [mscorlib]System.Console::WriteLine("+this.param.getType().toAssembly()+")\n";
+        return param.code()+"call void [mscorlib]System.Console::WriteLine("+this.param.getType().toAssembly()+")\n";
     }
 }

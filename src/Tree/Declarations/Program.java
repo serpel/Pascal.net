@@ -70,10 +70,13 @@ public class Program extends Declarations{
             } else if (d instanceof TypeDecl) {
                 types += d.codeGeneration();
             } else {
-                main += d.codeGeneration();
+                //main += Env.getIntance().getTable().getLocals();
             }
         }
 
+        Env te = Env.getIntance().getPrev();
+        main += te.getTable().getLocals();
+        
         if (stms != null) {
             main += this.stms.codeGeneration();
         }

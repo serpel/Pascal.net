@@ -53,7 +53,7 @@ parser code {:
 
 terminal          SEMICOLON, COLON, SEMI, PLUS, MINUS, TIMES, DIVIDE, MOD, LBRACKET, RBRACKET, LPAR, RPAR, GREATER_THAN, GREATER_THAN_OR_EQUAL, LESS_THAN, LESS_THAN_OR_EQUAL, EQUAL, NOT_EQUAL, DOT, ASSIGN;
 terminal          PROGRAM, FUNCTION, VAR, CASE, IF, ELSE, WHILE, FOR, REPEAT, THEN, TO, DO, OF, UNTIL, BEGIN, END, AND, OR, REF, WRITELN, READLN;
-terminal          ARRAY, STRING, INT, BOOL, TYPE, CONST, NOT, FLOAT, VOID, CHAR, RECORD;
+terminal          ARRAY, STRING, INT, BOOL, TYPE, CONST, NOT, FLOAT, VOID, CHAR, RECORD, RETURN;
 
 //Types
 terminal int     INT_LITERAL;
@@ -256,6 +256,9 @@ statement ::= function_stms:f SEMICOLON
               |
               READLN LPAR variable:i RPAR SEMICOLON
               {: RESULT=new Read(i); :}
+              |
+              RETURN expr:e SEMICOLON
+              {: RESULT=new Return(e); :}
               ;
 
 else      ::= ELSE compound:c

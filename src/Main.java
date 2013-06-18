@@ -19,7 +19,7 @@ public class Main {
     static public void main(String argv[]) {
         /* Start the parser */
         try {
-            parser p = new parser(new Lexer(new FileReader("src/sort.pas")));
+            parser p = new parser(new Lexer(new FileReader("src/potencia.pas")));
             Declarations result = (Declarations) p.parse().value;
 
             //validacion semantica

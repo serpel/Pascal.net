@@ -77,14 +77,14 @@ public class IfStms extends Statement{
 
     @Override
     public String codeGenerationStament() {
-        //String etiqueta1 = Assambly.getInstance().getLabel("If");
-        String etiqueta2 = Assambly.getInstance().getLabel("EndIf");
+        String etiqueta1 = Assambly.getInstance().getLabel("else");
+        String etiqueta2 = Assambly.getInstance().getLabel("fin_else");
          
         String cVerdadero = this.ifst != null ? ifst.codeGeneration() : "";
         String cFalso = this.elsest!=null ? elsest.codeGeneration(): "";
-//         
-//        return this.expr.codeGeneration()+"brzero "+etiqueta1+"\n"+cFalso+"\nbr "+etiqueta2+"\n"+etiqueta1+":\n"+cVerdadero+"\n"+etiqueta2+":\n";   
-        return expr.codeGeneration()+"brtrue.s "+etiqueta2+"\n"+cVerdadero+etiqueta2+":\n"+cFalso; 
+        //       
+        //return this.expr.codeGeneration()+"brzero "+etiqueta1+"\n"+cFalso+"\nbr "+etiqueta2+"\n"+etiqueta1+":\n"+cVerdadero+"\n"+etiqueta2+":\n";   
+        return expr.codeGeneration()+"ldc.i4.0\nceq\nbrtrue "+etiqueta1+"\n"+cVerdadero+"br "+etiqueta2+"\n"+etiqueta1+":\n"+cFalso+etiqueta2+":\n"; 
     }
     
 }

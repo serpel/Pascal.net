@@ -19,6 +19,15 @@ public abstract class Literal extends Expression{
 
     @Override
     public String codeGeneration() {
-        return this.codeGen();
+        
+        String tmp = "";
+        tmp += codeGen();
+        
+//        if(next!=null)
+//        {
+//            tmp += next.codeGeneration();
+//        }
+        
+        return tmp;
     }
 }

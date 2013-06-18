@@ -5,6 +5,7 @@
 package Tree.Expressions;
 
 import Semantic.Env;
+import Semantic.ErrorLog;
 import Tree.Types.Type;
 import java.util.ArrayList;
 
@@ -40,29 +41,41 @@ public class FunctionExpr extends Expression {
 
     @Override
     public void semanticValidation() {
-        //throw new UnsupportedOperationException("Not supported yet.");
+        
+        Type t = Env.getIntance().getFunction(name.getIdentifier());
+        if( t == null)
+        {
+            ErrorLog.getInstance().add("Error: funcion " +this.name.getIdentifier()+ " no existe.\n");
+        }
+        
+        this.elist.semantic();
+        
+        super.setType(t);
+        //falta comprobar parametros
     }
     
     @Override
-    public String codeGeneration() {   
-        
-        String tmp = "";
-        Type t = Env.getIntance().getType(this.name.getIdentifier());
-        
-        tmp += this.elist.codeGeneration();
-        tmp +="call "+t.toAssembly()+" "+this.name.getIdentifier()+"(";
-        
+    public String codeGeneration() {
+
+        String tmp = "", arg = "";
+        Type t = Env.getIntance().getFunction(this.name.getIdentifier());
+
+        tmp += this.elist.code();
+        tmp += "call " + t.toAssembly() + " " + this.name.getIdentifier() + "(";
+
         Expression e = this.elist;
-        while(e!=null)
-        {
-            tmp += e.getType().toAssembly();
-            tmp += ",";
+        while (e != null) {
+            arg += e.getType().toAssembly();
+            arg += ",";
             e = e.getNext();
         }
-        
-        tmp = tmp.substring(0,tmp.length()-1);
-        tmp += ")\n"; 
-        
+
+        if (arg.length() > 0) {
+            arg = arg.substring(0, arg.length() - 1);
+            tmp += arg;
+        }
+        tmp += ")\n";
+
         return tmp;
     }
 }

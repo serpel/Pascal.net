@@ -29,8 +29,8 @@ public class Read extends Statement{
     public String codeGenerationStament() {
         
         String tmp;
-        tmp = "call " + i.getType().toStr() + " [mscorlib]System.Console::ReadLine()\n";
-        tmp += "stloc."+Env.getIntance().getNumber(i.getIdentifier())+"\n";
+        tmp = "call " + i.getType().toStr() + " [mscorlib]System.Console::Read()\n";
+        tmp += "stloc "+Env.getIntance().getNumber(i.getIdentifier())+"\n";
         
         return tmp;
       }

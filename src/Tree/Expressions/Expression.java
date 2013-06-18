@@ -45,4 +45,14 @@ public abstract class Expression {
     }
     
     public abstract String codeGeneration();
+    
+    public String code()
+    {
+        String tmp = codeGeneration();  
+        if(next!=null)
+        {
+            tmp += next.code();
+        }
+        return tmp;
+    }
 }

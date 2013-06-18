@@ -40,7 +40,7 @@ identifier      = {letter}({alphanumeric}|{other_id_char})*
 integer         = {digit}*
 float           = {integer}\.{integer}
 bool            = [true|false]
-char            = '.'
+char            = '{alphanumeric}'
 leftbrace       = \{
 rightbrace      = \}
 
@@ -58,7 +58,7 @@ EndOfLineComment = "//" {InputCharacter}* {LineTerminator}?
 DocumentationComment = "(*" "*"+ [^(*] ~"*)"
 
 /* Char Literal */
-StringCharacter = [^\r\n\'\\]
+StringCharacter = [^\r\n\"\\]
 
 %state STRING
    
@@ -84,8 +84,8 @@ StringCharacter = [^\r\n\'\\]
     "]"                { return symbol(sym.RBRACKET); }
     ">="               { return symbol(sym.GREATER_THAN_OR_EQUAL); }
     ">"                { return symbol(sym.GREATER_THAN); }
-    "<="               { return symbol(sym.LESS_THAN); }
-    "<"                { return symbol(sym.LESS_THAN_OR_EQUAL); }
+    "<="               { return symbol(sym.LESS_THAN_OR_EQUAL); }
+    "<"                { return symbol(sym.LESS_THAN); }
     "!="               { return symbol(sym.NOT_EQUAL); }
     "="                { return symbol(sym.EQUAL); }
     "."                { return symbol(sym.DOT); }
@@ -126,6 +126,7 @@ StringCharacter = [^\r\n\'\\]
     "bool"             { return symbol(sym.BOOL); }
     "char"             { return symbol(sym.CHAR); }
     "void"             { return symbol(sym.VOID); }
+    "return"           { return symbol(sym.RETURN); }
     
    
     {identifier}       { return symbol(sym.ID, yytext()); }
@@ -140,12 +141,12 @@ StringCharacter = [^\r\n\'\\]
     {WhiteSpace}       { /* just skip what was found, do nothing */ }  
 
     /* string literal */
-    \'                 { yybegin(STRING); string.setLength(0); }
+    \"                 { yybegin(STRING); string.setLength(0); }
  
 }
 
 <STRING> {
-  \'                             { yybegin(YYINITIAL); return symbol(sym.STRING_LITERAL, string.toString()); }
+  \"                             { yybegin(YYINITIAL); return symbol(sym.STRING_LITERAL, string.toString()); }
   
   {StringCharacter}+             { string.append( yytext() ); }
   
@@ -155,7 +156,6 @@ StringCharacter = [^\r\n\'\\]
   "\\n"                          { string.append( '\n' ); }
   "\\f"                          { string.append( '\f' ); }
   "\\r"                          { string.append( '\r' ); }
-  "\\\'"                         { string.append( '\'' ); }
   "\\'"                          { string.append( '\'' ); }
   "\\\\"                         { string.append( '\\' ); }
   \\[0-3]?                       { char val = (char) Integer.parseInt(yytext().substring(1),8);

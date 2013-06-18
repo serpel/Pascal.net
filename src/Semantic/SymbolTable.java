@@ -5,6 +5,7 @@
 package Semantic;
 
 import Tree.Expressions.Expression;
+import Tree.Types.Array;
 import Tree.Types.Record;
 import Tree.Types.Type;
 import java.util.ArrayList;
@@ -34,6 +35,13 @@ public class SymbolTable {
     Hashtable<String, Type> records = new Hashtable<>();
 
     public SymbolTable() {
+    }
+    
+    public Type getfunction(String name) {
+        if (funtions.containsKey(name)) {
+            return funtions.get(name);
+        }
+        return null;
     }
 
     public void addVariable(String name, Type t)
@@ -119,14 +127,42 @@ public class SymbolTable {
          local.append(".locals init (");
          offset = local.length();
          
-         for(int i=0;i<list.size();i++)
-         {
-             local.append("["); local.append(i); local.append("] ");
-             local.append(typelist.get(i));local.append(" "); local.append(list.get(i));
-             if(i<list.size()-1)
-             {
+         for (int i = 0; i < list.size(); i++) {
+             Type ti = typeTable.get(list.get(i));
+
+             if (ti instanceof Array) {
+                 
+                 //int32[0...,0...,0...] 'array'
+                 Array a = (Array)ti;
+                 local.append("[");
+                 local.append(i);
+                 local.append("] ");
+                 
+                 local.append(a.getExprs().getType().toAssembly());
+                 local.append(" ");
+                 
+                 for (int b = 0; b < a.count(); b++) {
+                     
+                     local.append("[");
+                     local.append("0...");
+                     local.append("]");
+                 }
+                 local.append(list.get(i));
+                 
+             } else {
+
+                 local.append("[");
+                 local.append(i);
+                 local.append("] ");
+                 local.append(typelist.get(i));
+                 local.append(" ");
+                 local.append(list.get(i));
+                
+             }
+             
+              if (i < list.size() - 1) {
                  local.append(",\n");
-                 local.append(tmp,0, offset);
+                 local.append(tmp, 0, offset);
              }
          }
          local.append(")\n");

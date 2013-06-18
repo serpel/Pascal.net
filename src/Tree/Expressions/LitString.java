@@ -27,7 +27,7 @@ public class LitString extends Literal {
 
     @Override
     public String codeGen() {
-        return "ldstr " +this.value+"\n";
+        return "ldstr \"" +this.value+"\"\n";
     }
        
 }
